@@ -1,0 +1,61 @@
+<p-dataTable [value]="lancamentos" [paginator]="true" [rows]="5"
+    [responsive]="true" emptyMessage="Nenhum lançamento encontrado">
+  <p-column field="pessoa" header="Pessoa"></p-column>
+  <p-column field="descricao" header="Descrição"></p-column>
+  <p-column header="Vencimento" styleClass="col-data">
+      <ng-template let-lanc="rowData" pTemplate="body">
+          <span>{{ lanc.dataVencimento | date:'dd/MM/yyyy' }}</span>
+      </ng-template>
+  </p-column>
+  <p-column header="Pagamento" styleClass="col-data">
+      <ng-template let-lanc="rowData" pTemplate="body">
+          <span>{{ lanc.dataPagamento | date:'dd/MM/yyyy' }}</span>
+      </ng-template>
+  </p-column>
+  <p-column field="valor" header="Valor" styleClass="col-valor">
+    <ng-template let-lanc="rowData" pTemplate="body">
+      <span [style.color]="lanc.tipo === 'DESPESA' ? 'red' : 'blue'">
+        {{ lanc.valor | number:'1.2-2' }}
+      </span>
+    </ng-template>
+  </p-column>
+  <p-column styleClass="col-acoes">
+      <ng-template pTemplate="body">
+        <a pButton icon="fas fa-edit" pTooltip="Editar" tooltipPosition="top"></a>
+        <button pButton icon="fas fa-trash-alt" pTooltip="Excluir" tooltipPosition="top"></button>
+      </ng-template>
+  </p-column>
+</p-dataTable>
+
+<!--
+<p-table [value]="lancamentos" [paginator]="true" [rows]="5" [responsive]="true">
+  <ng-template pTemplate="caption">
+    Lista de Lançamentos
+  </ng-template>
+  <ng-template pTemplate="header">
+      <tr>
+          <th>Pessoa</th>
+          <th>Descrição</th>
+          <th class="col-data">Vencimento</th>
+          <th class="col-data">Pagamento</th>
+          <th class="col-valor">Valor</th>
+          <th class="col-acoes">Ações</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-lanc>
+      <tr>
+          <td>{{lanc.pessoa}}</td>
+          <td>{{lanc.descricao}}</td>
+          <td class="col-data">{{lanc.dataVencimento | date:'dd/MM/y'}}</td>
+          <td class="col-data">{{lanc.dataPagamento | date:'dd/MM/y'}}</td>
+          <td class="col-valor">
+            <span [style.color]="lanc.tipo === 'DESPESA' ? 'red' : 'blue'">{{lanc.valor | number:'1.2-2'}}</span>
+          </td>
+          <td class="col-acoes">
+            <a pButton icon="fas fa-edit" pTooltip="Editar" tooltipPosition="top"></a>
+            <button pButton icon="fas fa-trash-alt" pTooltip="Excluir" tooltipPosition="top"></button>
+          </td>
+      </tr>
+  </ng-template>
+</p-table>
+-->
