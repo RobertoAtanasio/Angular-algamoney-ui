@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-// import { JwtHelper } from 'angular2-jwt';
-// import 'rxjs/add/operator/toPromise';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
 
   oauthTokenUrl = 'http://localhost:8080/oauth/token';
+  tokensRevokeUrl = 'http://localhost:8080/tokens/revoke';
+
   jwtPayload: any;
   dateExpiration: any;
   token: string;
@@ -17,7 +19,9 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private helper: JwtHelperService) {
+    private helper: JwtHelperService,
+    private router: Router,
+    private messageService: MessageService) {
       this.carregarToken();
     }
 
@@ -34,6 +38,7 @@ export class AuthService {
       .then(response => {
         const data = JSON.parse(JSON.stringify(response));
         this.token = data.access_token;
+
         this.armazenarToken(this.token);
         return response;  // se incluir o return, o método deve retornar any, senão void
       })
@@ -48,7 +53,39 @@ export class AuthService {
       });
   }
 
+  isExisteToken(): boolean {
+    const token = localStorage.getItem('token');
+    if (token) {
+      return true;
+    }
+    return false;
+  }
+
+  isAccessTokenInvalido() {
+    const token = localStorage.getItem('token');
+    return !token || this.helper.isTokenExpired(token);
+  }
+
+  isTokenExpirou(): boolean {
+    const tokenExpirou = this.getControleTokenExpirou();
+    if (!tokenExpirou || tokenExpirou === 'SIM') {
+      return true;
+    }
+    return false;
+  }
+  isSessaoExpirou(): boolean {
+    const tokenExpirou = this.getControleTokenExpirou();
+    if (tokenExpirou === 'sessao_expirou') {
+      return true;
+    }
+    return false;
+  }
+
   obterNovoAccessToken(): Promise<any> {
+
+    if (!this.isExisteToken()) {
+      return Promise.resolve(null);
+    }
 
     const headers = new HttpHeaders()
     .set('Authorization', 'Basic YW5ndWxhcjphbmd1bGFyMA==')
@@ -56,39 +93,71 @@ export class AuthService {
 
     const body = 'grant_type=refresh_token';
 
+    this.setTokenExpirou();
+
     return this.http.post(this.oauthTokenUrl, body, { headers, withCredentials: true })
       .toPromise()
       .then(response => {
         const data = JSON.parse(JSON.stringify(response));
         this.token = data.access_token;
         this.armazenarToken(this.token);
-        console.log('Novo access token criado!');
         return Promise.resolve(null);
       })
       .catch(response => {
-        console.error('Erro ao renovar token.', response);
-        return Promise.resolve(null);
+        if (this.isSessaoExpirou) {
+          this.logout();
+        } else if (this.isAccessTokenInvalido()) {
+          this.setSessaoExpirou();
+          this.messageService.add({
+            severity: 'error',
+            detail: 'Sua sessão expirou!'
+          });
+        }
+        return Promise.resolve(response);
       });
-
   }
 
   temPermissao(permissao: string) {
     return this.jwtPayload && this.jwtPayload.authorities.includes(permissao);
   }
 
-  private armazenarToken(token: string) {
-    this.jwtPayload = this.helper.decodeToken(token);
-    localStorage.setItem('token', token);
+  obterToken() {
+    return localStorage.getItem('token');
+  }
 
-    console.log('jwtPayload', this.jwtPayload);
+  temQualquerPermissao(roles) {
+    for (const role of roles) {
+      if (this.temPermissao(role)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-    this.tokenExpired = this.helper.isTokenExpired(token);
-    this.dateExpiration = this.helper.getTokenExpirationDate(token);
-    // console.log('dateExpiration', this.dateEsired);
+  logout(): Promise<any> {
+    const headers = new HttpHeaders()
+    .set('Authorization', 'Basic YW5ndWxhcjphbmd1bGFyMA==');
+
+    return this.http.delete(this.tokensRevokeUrl, { headers, withCredentials: true })
+    .toPromise()
+    .then(() => {
+      this.apagarLocalStorage();
+      this.router.navigate(['/login']);
+    })
+    .catch( erro => {
+      console.log('Houve erro no delete token...');
+      this.messageService.add({
+        severity: 'error',
+        detail: erro
+      });
+    });
   }
 
   apagarLocalStorage() {
+    this.token = null;
+    this.jwtPayload = null;
     localStorage.removeItem('token');
+    localStorage.removeItem('access_token_expirou');
   }
 
   private carregarToken() {
@@ -97,4 +166,24 @@ export class AuthService {
       this.armazenarToken(token);
     }
   }
+
+  private armazenarToken(token: string) {
+    this.jwtPayload = this.helper.decodeToken(token);
+    localStorage.setItem('token', token);
+    this.tokenExpired = this.helper.isTokenExpired(token);
+    this.dateExpiration = this.helper.getTokenExpirationDate(token);
+  }
+
+  private setTokenExpirou() {
+    localStorage.setItem('access_token_expirou', 'SIM');
+  }
+
+  private setSessaoExpirou() {
+    localStorage.setItem('access_token_expirou', 'sessao_expirou');
+  }
+
+  private getControleTokenExpirou(): string {
+   return localStorage.getItem('access_token_expirou');
+  }
+
 }

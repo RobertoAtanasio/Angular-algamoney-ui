@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SegurancaRoutingModule } from './seguranca-routing.module';
 import { ToastModule } from 'primeng/toast';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   imports: [
@@ -21,6 +22,11 @@ import { ToastModule } from 'primeng/toast';
 
     SegurancaRoutingModule
   ],
-  declarations: [LoginFormComponent]
+  declarations: [
+    LoginFormComponent
+  ],
+  providers: [
+    AuthGuard
+  ]
 })
 export class SegurancaModule { }

@@ -13,13 +13,13 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
   }
 
+  logout() {
+    this.auth.logout();
+  }
+
 // a ? em {{ auth.jwtPayload?.nome }} significa que se o objeto ainda não tiver
 // sido criado, não dará erro.
 // Foi injetado o private auth: AuthService no construtor para que o html tenha
 // acesso à variável auth.
-
-  criarNovoAccessToken() {
-    this.auth.obterNovoAccessToken();
-  }
 
 }

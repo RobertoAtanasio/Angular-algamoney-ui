@@ -31,7 +31,11 @@ export class PessoaService {
       .toPromise()
       .then(response => {
         return response;
-      });
+      })
+      .catch(response => {
+        console.error('Erro ao pesquisar pessoas.', response);
+        return response;
+      });;
   }
 
   listarTodas(): Promise<any> {

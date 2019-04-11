@@ -2,7 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { CampoDataDirective } from './campo-data.directive';
@@ -18,6 +18,7 @@ registerLocaleData(localePt, 'pt-BR');
 
 import { AppRoutingModule } from './app-routing.module';
 import { SegurancaModule } from './seguranca/seguranca.module';
+import { HttpConfigInterceptor } from './seguranca/httpconfig.interceptor';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,12 @@ import { SegurancaModule } from './seguranca/seguranca.module';
     SegurancaModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpConfigInterceptor,
+      multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

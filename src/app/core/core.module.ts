@@ -22,6 +22,7 @@ import localePt from '@angular/common/locales/pt';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 import { AuthService } from '../seguranca/auth.service';
 import { JwtModule } from '@auth0/angular-jwt';
+import { NaoAutorizadoComponent } from './nao-autorizado.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -43,8 +44,13 @@ export function tokenGetter() {
       }
     })
   ],
-  declarations: [NavbarComponent, PaginaNaoEncontradaComponent],
-  exports: [NavbarComponent, ConfirmDialogModule],
+  declarations: [
+    NavbarComponent,
+    PaginaNaoEncontradaComponent,
+    NaoAutorizadoComponent],
+  exports: [
+    NavbarComponent,
+    ConfirmDialogModule],
   providers: [
     ErrorHandlerService,
     LancamentoService,

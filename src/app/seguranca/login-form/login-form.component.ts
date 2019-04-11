@@ -19,20 +19,14 @@ export class LoginFormComponent implements OnInit {
   }
 
   login(usuario: string, senha: string) {
-    this.apagarLocalStorage();
+
     this.auth.login(usuario, senha)
     .then((data) => {
-      // console.log('>>>', data.access_token);   // só se o método retorno any
       this.router.navigate(['/lancamentos']);
     })
     .catch(erro => {
-      // console.log('Houve erro', erro);
       this.errorHandler.handle(erro);
     });
-  }
-
-  apagarLocalStorage() {
-    this.auth.apagarLocalStorage();
   }
 
 }

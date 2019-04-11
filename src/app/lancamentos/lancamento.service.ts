@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+  HttpErrorResponse,
+  HttpEvent,
+  HttpResponse } from '@angular/common/http';
 
 import * as moment from 'moment';
 import { Lancamento } from './../core/model';
+import { AuthService } from '../seguranca/auth.service';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry, map } from 'rxjs/operators';
 
 export class LancamentoFiltro {
   descricao: string;
@@ -53,8 +62,48 @@ export class LancamentoService {
       .toPromise()
       .then(response => {
         return response;
-      });
+      }
+    );
+  }
 
+  getAllGet(filtro: LancamentoFiltro): Observable<any> {
+
+    let params = new HttpParams()
+      .set('page', filtro.pagina.toString())
+      .set('size', filtro.itensPorPagina.toString());
+
+    if (filtro.descricao) {
+      params = params.set('descricao', filtro.descricao);
+    }
+
+    if (filtro.dataVencimentoInicio) {
+      params = params.set('dataVencimentoDe',
+        moment(filtro.dataVencimentoInicio).format('YYYY-MM-DD'));
+    }
+
+    if (filtro.dataVencimentoFim) {
+      params = params.set('dataVencimentoAte',
+        moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'));
+    }
+
+    return this.http.get<any> (`${this.lancamentosUrl}?resumo`, { params })
+      .pipe(
+        map((event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+                console.log('> Evento:', event);
+                console.log('URL', event.url);
+            }
+            return event;
+          }
+        ),
+        catchError(this.handlerError) //,
+        // retry(1)
+      );
+  }
+
+  handlerError(error: HttpErrorResponse) {
+    console.log(error);
+    return throwError(error);
   }
 
   excluir(codigo: number): Promise<void> {

@@ -1,20 +1,36 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { AuthService } from './../seguranca/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorHandlerService {
 
-  constructor(private messageService: MessageService) {}
+  constructor(
+    private messageService: MessageService,
+    private auth: AuthService) {}
 
   handle(errorResponse: any) {
+console.log('ErrorHandlerService...');
     let msg: string;
-    if (typeof errorResponse === 'string') {
+
+    if (this.auth.isTokenExpirou()) {
+      return null;
+    } else if (this.auth.isSessaoExpirou()) {
+      return null;
+    } else if (typeof errorResponse === 'string') {
       msg = errorResponse;
     } else if (errorResponse instanceof Object
+        && errorResponse.status === 401) {
+      return null;
+    } else if (errorResponse instanceof Object
         && errorResponse.status >= 400 && errorResponse.status <= 499) {
-      msg = 'Ocorreu um erro ao processar a sua solicitação';
+      msg = 'Ocorreu um erro ao processar a sua solicitação.';
+
+      if (errorResponse.status === 403) {
+        msg = 'Você não tem permissão para executar esta ação.';
+      }
       try {
         msg = errorResponse.error[0].mensagemUsuario;
       } catch (e) { }
@@ -28,5 +44,5 @@ export class ErrorHandlerService {
     });
 
   }
-}
 
+}

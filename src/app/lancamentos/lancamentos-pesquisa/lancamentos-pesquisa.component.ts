@@ -4,6 +4,7 @@ import { LazyLoadEvent, MessageService } from 'primeng/components/common/api';
 import { ConfirmationService } from 'primeng/api';
 import { ErrorHandlerService } from './../../core/error-handler.service';
 import { Title } from '@angular/platform-browser';
+import { AuthService } from 'src/app/seguranca/auth.service';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -30,7 +31,8 @@ export class LancamentosPesquisaComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
-    private title: Title) {}
+    private title: Title,
+    private auth: AuthService) {}
 
   ngOnInit() {
     // o evento (onLazyLoad)="aoMudarPagina($event)" da página já é carregado, logo a função será executada
@@ -48,7 +50,20 @@ export class LancamentosPesquisaComponent implements OnInit {
         this.lancamentos = data.content;
         this.totalRegistros = data.totalElements;
       })
-      .catch(erro => this.errorHandler.handle(erro));
+      .catch(erro => {
+        this.errorHandler.handle(erro);
+      }
+    );
+
+    // this.lancamentoService.getAllGet(this.filtro)
+    //   .subscribe(data => {
+    //     console.log('data', data);
+    //     this.lancamentos = data.content;
+    //     this.totalRegistros = data.totalElements;
+    //   }, (error) => {
+    //     console.log('error', error);
+    //   }
+    // );
   }
 
   aoMudarPagina(event: LazyLoadEvent) {
