@@ -10,9 +10,9 @@ import {
 
 import * as moment from 'moment';
 import { Lancamento } from './../core/model';
-import { AuthService } from '../seguranca/auth.service';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry, map } from 'rxjs/operators';
+import { environment } from './../../environments/environment';
 
 export class LancamentoFiltro {
   descricao: string;
@@ -27,10 +27,12 @@ export class LancamentoFiltro {
 })
 export class LancamentoService {
 
-  retorno: any;
-  lancamentosUrl = 'http://localhost:8080/lancamentos';
+  // retorno: any;
+  lancamentosUrl: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
+  }
 
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
 

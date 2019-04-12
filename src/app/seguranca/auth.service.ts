@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { environment } from './../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  oauthTokenUrl = 'http://localhost:8080/oauth/token';
-  tokensRevokeUrl = 'http://localhost:8080/tokens/revoke';
+  oauthTokenUrl: string;
+  tokensRevokeUrl: string;
 
   jwtPayload: any;
   dateExpiration: any;
@@ -22,6 +23,8 @@ export class AuthService {
     private helper: JwtHelperService,
     private router: Router,
     private messageService: MessageService) {
+      this.oauthTokenUrl = `${environment.apiUrl}/oauth/token`;
+      this.tokensRevokeUrl = `${environment.apiUrl}/tokens/revoke`;
       this.carregarToken();
     }
 
@@ -63,6 +66,8 @@ export class AuthService {
 
   isAccessTokenInvalido() {
     const token = localStorage.getItem('token');
+    this.jwtPayload = this.helper.decodeToken(token);
+    // console.log('jwtPayload', this.jwtPayload);
     return !token || this.helper.isTokenExpired(token);
   }
 
@@ -87,6 +92,10 @@ export class AuthService {
       return Promise.resolve(null);
     }
 
+    if (this.isSessaoExpirou) {
+      this.logout();
+    }
+
     const headers = new HttpHeaders()
     .set('Authorization', 'Basic YW5ndWxhcjphbmd1bGFyMA==')
     .set('Content-Type', 'application/x-www-form-urlencoded');
@@ -95,24 +104,24 @@ export class AuthService {
 
     this.setTokenExpirou();
 
+    console.log('obtendo novo token...');
+
     return this.http.post(this.oauthTokenUrl, body, { headers, withCredentials: true })
       .toPromise()
       .then(response => {
+        console.log('obteve novo token.');
         const data = JSON.parse(JSON.stringify(response));
         this.token = data.access_token;
         this.armazenarToken(this.token);
         return Promise.resolve(null);
       })
       .catch(response => {
-        if (this.isSessaoExpirou) {
-          this.logout();
-        } else if (this.isAccessTokenInvalido()) {
-          this.setSessaoExpirou();
-          this.messageService.add({
-            severity: 'error',
-            detail: 'Sua sessão expirou!'
-          });
-        }
+        console.log('erro ao obter novo token.');
+        this.setSessaoExpirou();
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Sua sessão expirou!'
+        });
         return Promise.resolve(response);
       });
   }
@@ -135,6 +144,8 @@ export class AuthService {
   }
 
   logout(): Promise<any> {
+
+    console.log('Logout...');
     const headers = new HttpHeaders()
     .set('Authorization', 'Basic YW5ndWxhcjphbmd1bGFyMA==');
 
@@ -150,6 +161,8 @@ export class AuthService {
         severity: 'error',
         detail: erro
       });
+      this.apagarLocalStorage();
+      this.router.navigate(['/login']);
     });
   }
 

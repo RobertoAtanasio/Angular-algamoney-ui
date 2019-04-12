@@ -58,6 +58,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
           }),
           // retry(1),
           catchError((error: HttpErrorResponse) => {
+            console.log('URL:', request.url);
             return throwError(error);
           })
         );

@@ -11,7 +11,6 @@ import { ToastModule } from 'primeng/toast';
 
 import { PessoaCadastroComponent } from './pessoa-cadastro/pessoa-cadastro.component';
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
-import { PessoasGridComponent } from './pessoas-grid/pessoas-grid.component';
 
 import { SharedModule } from './../shared/shared.module';
 import { PessoasRoutingModule } from './pessoas-routing.module';
@@ -19,8 +18,7 @@ import { PessoasRoutingModule } from './pessoas-routing.module';
 @NgModule({
   declarations: [
     PessoaCadastroComponent,
-    PessoasPesquisaComponent,
-    PessoasGridComponent
+    PessoasPesquisaComponent
   ],
   exports: [],
   imports: [

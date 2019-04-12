@@ -13,12 +13,14 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private errorHandler: ErrorHandlerService,
-    private router: Router) { }
+    private router: Router) {}
 
   ngOnInit() {
   }
 
   login(usuario: string, senha: string) {
+
+    this.auth.apagarLocalStorage();
 
     this.auth.login(usuario, senha)
     .then((data) => {

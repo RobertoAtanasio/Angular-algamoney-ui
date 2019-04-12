@@ -95,7 +95,10 @@ export class LancamentoCadastroComponent  implements OnInit {
         });
         // form.reset();
         // this.lancamento = new Lancamento();
-        this.router.navigate(['/lancamentos', data.codigo]);
+        console.log('>', data);
+        this.lancamento.codigo = data.codigo;
+        this.title.setTitle('Edição de Lançamento');
+        // this.router.navigate(['/lancamentos', data.codigo]);
       })
       .catch(erro => this.errorHandler.handle(erro));
   }

@@ -12,7 +12,7 @@ export class ErrorHandlerService {
     private auth: AuthService) {}
 
   handle(errorResponse: any) {
-console.log('ErrorHandlerService...');
+
     let msg: string;
 
     if (this.auth.isTokenExpirou()) {
