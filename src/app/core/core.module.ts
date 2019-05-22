@@ -17,13 +17,13 @@ import { CategoriaService } from './../categorias/categoria.service';
 import { MessageService } from 'primeng/api';
 import { LOCALE_ID } from '@angular/core';
 
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 import { AuthService } from '../seguranca/auth.service';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NaoAutorizadoComponent } from './nao-autorizado.component';
 
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 registerLocaleData(localePt, 'pt-BR');
 
 export function tokenGetter() {

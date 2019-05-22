@@ -84,7 +84,7 @@ export class LancamentosPesquisaComponent implements OnInit {
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  confirmacao(codigo: number) {
+  confirmaExclusao(codigo: number) {
     this.confirmationService.confirm({
         message: 'Você tem certeza que deseja efetuar essa ação?',
         header: 'Exclusão',

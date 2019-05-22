@@ -1,3 +1,33 @@
 .js-botao-tab {
   height: 25px;
 }
+
+.col-nome-header {
+  text-align: center;
+}
+
+.col-nome {
+  text-align: left;
+}
+
+.col-cidade-header {
+  text-align: center;
+}
+
+.col-cidade {
+  text-align: left;
+}
+
+.col-estado-header {
+  width: 110px;
+  text-align: center;
+}
+
+.col-estado {
+  width: 110px;
+  text-align: center;
+}
+
+.col-status {
+  text-align: center
+}

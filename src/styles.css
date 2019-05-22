@@ -37,6 +37,11 @@ label {
   text-align: right;
 }
 
+.col-valor-header {
+  width: 120px;
+  text-align: center;
+}
+
 .col-data {
   width: 100px;
   text-align: center;

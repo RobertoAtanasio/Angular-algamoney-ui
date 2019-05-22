@@ -5,31 +5,51 @@ import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-ca
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { AuthGuard } from '../seguranca/auth.guard';
 
+// foi feito da forma abaixo porque em app-routing.module.ts foi incluído o loadChildren
 const routes: Routes = [
   {
-    path: 'lancamentos',
+    path: '',
     component: LancamentosPesquisaComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_PESQUISAR_LANCAMENTO']}
   },
   { path:
-    'lancamentos/novo',
+    'novo',
     component: LancamentoCadastroComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_CADASTRAR_LANCAMENTO'] }
   },
   {
-    path: 'lancamentos/:codigo',
+    path: ':codigo',
     component: LancamentoCadastroComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_CADASTRAR_LANCAMENTO'] }
   }
 ];
 
+// const routes: Routes = [
+//   {
+//     path: 'lancamentos',
+//     component: LancamentosPesquisaComponent,
+//     canActivate: [AuthGuard],
+//     data: { roles: ['ROLE_PESQUISAR_LANCAMENTO']}
+//   },
+//   { path:
+//     'lancamentos/novo',
+//     component: LancamentoCadastroComponent,
+//     canActivate: [AuthGuard],
+//     data: { roles: ['ROLE_CADASTRAR_LANCAMENTO'] }
+//   },
+//   {
+//     path: 'lancamentos/:codigo',
+//     component: LancamentoCadastroComponent,
+//     canActivate: [AuthGuard],
+//     data: { roles: ['ROLE_CADASTRAR_LANCAMENTO'] }
+//   }
+// ];
+
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
 export class LancamentosRoutingModule { }

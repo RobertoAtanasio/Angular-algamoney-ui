@@ -71,7 +71,7 @@ export class PessoasPesquisaComponent implements OnInit {
       });
   }
 
-  confirmacao(codigo: number) {
+  confirmaExclusao(codigo: number) {
     this.confirmationService.confirm({
         message: 'Você tem certeza que deseja efetuar essa ação?',
         header: 'Exclusão',

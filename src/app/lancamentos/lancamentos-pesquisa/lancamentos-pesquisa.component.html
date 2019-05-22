@@ -43,7 +43,7 @@
           <th>Descrição</th>
           <th class="col-data">Vencimento</th>
           <th class="col-data">Pagamento</th>
-          <th class="col-valor">Valor</th>
+          <th class="col-valor-header">Valor</th>
           <th class="col-acoes">Ações</th>
         </tr>
       </ng-template>
@@ -57,11 +57,11 @@
             <span [style.color]="lanc.tipo === 'DESPESA' ? 'red' : 'blue'">{{lanc.valor | number:'1.2-2'}}</span>
           </td>
           <td class="col-acoes">
-            <a pButton icon="fas fa-edit" pTooltip="Editar" tooltipPosition="top"
+            <button pButton icon="fas fa-edit" pTooltip="Editar" tooltipPosition="top"
               class="js-botao-tab"
-              [routerLink]="['/lancamentos', lanc.codigo]"></a>
+              [routerLink]="['/lancamentos', lanc.codigo]"></button>
             <button pButton icon="fas fa-trash-alt" pTooltip="Excluir" tooltipPosition="top"
-              (click)="confirmacao(lanc.codigo)" class="js-botao-tab"
+              (click)="confirmaExclusao(lanc.codigo)" class="js-botao-tab"
               [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')"></button>
           </td>
         </tr>
