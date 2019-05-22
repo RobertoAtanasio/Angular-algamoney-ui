@@ -1,0 +1,445 @@
+*	criar novo projeto:
+	ng new algamoney-ui
+	
+*	instalar o primeng:
+	npm install primeng --save
+	npm install primeicons --save
+	
+*	para adicionar fonte awesone:
+	npm install font-awesome --save
+	
+*	npm install ng2-currency-mask --save		// pacote para tratamento de máscaras em campo input de valor
+	import { CurrencyMaskModule } from "ng2-currency-mask";			// módulo para ser importado 
+
+*	ícones do primeng
+	Execute os seguintes passos:
+	1. Execute o comando: npm install primeicons --save
+	2. Navegue até o seu aquivo angular.json e dentro de styles adicione a referência do primeicons. Desta forma:
+	"styles": [
+	"node_modules/primeicons/primeicons.css",
+	"src/styles.css"
+	],
+	3. Dê o comando ng serve ou npm start e confira o resultado. Comigo funcionou apenas executando este processo.
+	3. Tive que executar o comando npm audit fix para os ícones aparecerem
+
+	exemplo em outra porta: ng serve --open --port=4201
+	
+*	npm i typescript@3.1.6 --save-dev --save-exact			// essa versão do typesccript é a que está funcionando
+	npm install typescript@">=3.1.1 <3.2.0" 
+	npm install --save-dev @angular/cli@latest
+	npm install --save-dev @angular/cli@7.2.3				// essa versão do angular é a que está funcionando
+	
+	npm install --save-dev @angular/cli@1.1.2
+	
+	ng --version
+	
+	npm uninstall --save-dev angular-cli
+	npm install --save-dev @angular/cli@latest
+	npm install
+	
+*	gerar novo componente:
+	ng generate component bem-vindo --spec=false
+	ng g c bem-vindo --spec=false
+	
+*	instalar o bootstrap
+	npm install bootstrap
+	
+	obs.: para importar a classe bootstrap.css, alterado o arquivo angular.json e incluído a entrada em "sryles":
+		"styles": [
+		  ...,
+		  "..node_modules/bootstrap/dist/css/bootstrap.css"
+		],
+		
+		*** Não encontrei esse arquivo. Resolvi incluindo a tag <script> do CSS ***
+
+*	Biblioteca Moment
+	npm install moment --save
+		
+*	Criando diretivas
+---------------------
+	ng g directive campo-colorido --skipTests=false
+
+*	Criando Serviços:
+	ng g s teste
+	ng g s seguranca/logout
+	
+*	comando: 
+	ng g m botoes										cria um novo módulo (module)
+	ng g c botoes/botao-grande --skipTests=false		cria um componente dentro do novo módulo
+
+	Gerar a guarda de segurança: ng g g seguranca/auth --skipTests=false
+	
+seguranca-routing
+ng generate module seguranca/seguranca-routing
+
+========================================================================================================================================
+Gerando o código executável:
+	Executar na pasta raiz do projeto: 
+	
+	mvn package	
+
+Executar a API na pasta target:
+	
+	java -jar algamoney-api-1.0.0-SNAPSHOT.jar --spring.datasource.username=root --spring.datasource.password=root --algamoney.origin-permitida=http://localhost:4200 --spring.profiles.active-oauth-security
+	
+========================================================================================================================================
+
+Criando componente de barra de navegação
+----------------------------------------
+ng g c navbar --spec=false
+
+//--- classe para estilizar o menu
+.navbar-menu {
+  position: fixed;		// faz com que o componente fique fixo, independente do tamanho da tela e existência de barra de rolagem
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 210px;
+  margin: 0;			// para retirar a margem já definida para o componente
+  padding: 0;			// retira o espaçamento interno da própria lista
+  z-index: 9998;		// aumenta a prioridade do componente para que o mesmofique por cima da tabela de dados de outros componentes
+
+  background-color: #3a3633;
+
+  list-style: none;		// retira a marcação da lista gerada pela tag <ul>
+}
+
+//--- classe para estilizar o nome do usuário
+
+.navbar-usuario {
+  padding: 15px;
+  margin-bottom: 15px;					// inclui um espaço em relação a borda
+  border-bottom: 1px solid #525151;		// inclui uma borda abaixo
+
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+}
+
+//--- classe para estilizar o item do menu
+
+.navbar-menuitem a {
+  color: #c0bbb7;
+  text-decoration: none;		// retira o sublinhado do link
+}
+	
+11.2. Respondendo a eventos do hospedeiro com @HostListener
+---------------------------------------------------------------
+*	Utiliza-se o @HostListener mais um evento do HTML	
+
+11.3. Vinculando propriedades do hospedeiro com @HostBinding
+------------------------------------------------------------
+*	com esta diretiva não é mais preciso utilizar o 
+	constructor(
+		private elementRef: ElementRef,
+		private renderer: Renderer2
+	) { } , nem mais o comando
+	this.renderer.setStyle(this.elementRef.nativeElement,
+      'background-color', 'yellow');
+	e retira-se os importes de ElementRef e Renderer2
+	
+11.4. Usando property binding em diretivas customizadas
+-------------------------------------------------------
+*	cria-se uma propriedade. No nosso exemplo, a variável 'cor'.
+*	No html, junto à diretiva appCampoColorido, adicionar cor='yellow', por exemplo para passar a cor que se quer para a diretiva
+*	Se não informar o parâmetro cor, a diretiva assume o valor definido internamente.
+*	Se o parâmetro for colocado entre [], o valor da cor deve ser colocada como uma string dentro das aspas, por
+	exemplo: [cor]="'yellow'" . Se não colocar como string, o sistema vai entender que é uma propriedade do componente, ou seja, está
+	se querendo informar uma variável do componente (xxxx.ts)
+*	Pode-se incluir os [] (property binding) no nome da diretiva Então o parâmetro fica:  [appCampoColorido]="'yellow'"
+
+11.5. Exportando a API da diretiva para o template
+--------------------------------------------------
+*	na diretive a variável exportAs: 'campoColorido' representa uma instância da diretiva, por isso informamos no html #campo="campoColorido"
+	para que no html possamos utilizar os métodos definidos na diretiva. Métodos esses que também são chamados pelo @Hostlistener
+*	Esta forma permite expor os métodos da diretiva para outras funcionalidade do sistema
+
+12.3. Registrando os controles do formulário
+--------------------------------------------
+*	É preciso registrar os campos INPUT do formulário (os ontroles precisam estar registrados dentro do ngForm).
+*	Vamos usar a diretiva ngModel apenas para registrar nossos controles no formulário.
+*	O ngForm gera uma instância de controle de formulário que é o form-control
+
+3.1. Criando o protótipo do formulário de cadastro de lançamentos
+-----------------------------------------------------------------
+*	ng g c lancamento-cadastro --skipTests=false
+
+13.9. Criando componente de mensagem de erro de validação
+---------------------------------------------------------
+*	A fim de não repetir a inclusão de div de mensagem de erro, vamos criar um componente para tratar erros.
+*	Criar o componente: ng g c message --skipTests=false --inline-template --inline-style
+*	Obs: em 
+	<app-message [control]="descricao" error="minlength"
+	  text="Mínimo de {{ descricao.errors?.minlength?.requiredLength }} caracteres">
+	</app-message>
+	o símbolo ? é um operador de segurança que testa se houver algum erro na expressão ao qual está associado, o sistema ignora
+	o erro, não apresentando nenhum mensagem e para o teste da validação da expressão.
+	
+14.2. Criando um módulo e exportando um componente
+--------------------------------------------------
+*	comando: 
+	ng g m botoes										cria um novo módulo (module)
+	ng g c botoes/botao-grande --skipTests=false		cria um componente dentro do novo módulo
+*	No novo módulo criado, incluir o comando exports: [BotaoGrandeComponent] para exportar o novo componente criado para que
+	o novo componente do módulo criado fique disponivel para quem fizer a importação do módulo criado.
+
+14.3. Reexportando um módulo
+----------------------------
+*	No trecho abaixo, a NavegacaoModule está importando o módulo do botão e reexportando o módulo do botão para ficar liberado
+	também o módulo do botão a quem for o módulo de navegação. Evitando com isso que o módulo que irá importar o módulo de
+	navegação também tenha que importar o módulo do botão.
+	
+	@NgModule({
+	  imports: [
+		CommonModule,
+		BotoesModule
+	  ],
+	  declarations: [MenuComponent],
+	  exports: [MenuComponent, BotoesModule]
+	})
+	export class NavegacaoModule { }
+	
+14.6. Criando um Feature Module
+-------------------------------
+*	Todos os componentes devem ser declarados no ...module.ts pai dos componentes.
+*	O módulo pai deve ser importado no app.module.ts
+
+14.8. O que são Shared Modules?
+-------------------------------
+*	São módulos compartilhados entre os diversos módulos do sistema.
+
+15.3. O que é injeção de dependências?
+--------------------------------------
+*	O objeto do serviço funcionario.service.ts é injetado no parâmetro  providers: [FuncionarioService] em app.module.ts onde
+	o Angula é quem faz a criação da classe e deixa disponível apenas uma instância da mesma para ser utilizada em qualquer
+	parte do sistema.
+*	A configuração desta forma: providers: [FuncionarioService], é um atalho para a injeção do objeto. A forma completa
+	é a seguinte: 
+	providers: [
+		{ provide: FuncionarioService, useClass: FuncionarioAbreviadoService }
+	],
+	nesse exemplo, a instãncia criada é da classe FuncionarioAbreviadoService
+*	O providers injeta um objeto completo instanciado.
+
+15.5. Configurando o injetor com provider por fábrica
+-----------------------------------------------------
+*	Em 
+	providers: [
+		{ provide: FuncionarioService, useClass: FuncionarioAbreviadoService }
+	],
+	será criado uma função, por exemplo:
+	const criarFuncionarioService = () => {
+	  return new FuncionarioAbreviadoService (3);
+	}
+	e a classe FuncionarioAbreviadoService no parâmetro providers será substiyuída por criarFuncionarioService
+	e a definição useClass, será substituída por useFactory, ficando assim:
+	providers: [
+		{ provide: FuncionarioService, useFactory: criarFuncionarioService }
+	  ]
+	
+
+==================================================================================================================================
+16.2. Instalando e testando o json-server
+-----------------------------------------
+*	Criaremos a API fake para testes.
+*	https://github.com/typicode/json-server
+*	npm install -g json-server
+*	json-server --watch data/db.json			data = pasta criada e db.json arquivo de dados salvo na pasta
+==================================================================================================================================
+
+18.2. Configurando rotas na aplicação
+-------------------------------------
+*	em app.module.ts, configurar:
+	- configurar as rotas:
+	const rotas: Routes = [
+	  { path: 'lancamentos', component: LancamentosPesquisaComponent },
+	  { path: 'lancamentos/novo', component: LancamentoCadastroComponent },
+	  { path: 'pessoas', component: PessoasPesquisaComponent }
+	];
+	- importar RouterModule e configurar as rotas:
+	RouterModule.forRoot(rotas),
+	- configurar a chamada das rotas em app.component.html:
+	<router-outlet></router-outlet>		isso funciona como placeholder, onde o Agular preeche de acordo com a rota atual.
+	
+18.3. Navegando com Router Link
+-------------------------------
+*	Um forma seria colocando o acesso à página via URL:
+	<ul class="navbar-menu" [hidden]="!exibindoMenu">
+      <li class="navbar-usuario">José da Silva</li>
+      <li class="navbar-menuitem"><a href="/lancamentos">Lançamentos</a></li>
+      <li class="navbar-menuitem"><a href="/pessoas">Pessoas</a></li>
+      <li class="navbar-menuitem"><a href="#">Logout</a></li>
+    </ul>
+	Dessa forma é dado um refresh a cada chamada.
+*	A melhor forma de chamar as telas é usar o routerLink que pertence ao RouterModule e esse deve ser importado no core.module.ts:
+	<ul class="navbar-menu" [hidden]="!exibindoMenu">
+      <li class="navbar-usuario">José da Silva</li>
+      <li class="navbar-menuitem"><a routerLink="/lancamentos">Lançamentos</a></li>
+      <li class="navbar-menuitem"><a routerLink="/pessoas">Pessoas</a></li>
+      <li class="navbar-menuitem"><a href="#">Logout</a></li>
+    </ul>
+*	Lembrar que tem-se que importat a diretiva RouteModule no arquivos .module.ts de cada grupo
+
+18.4. Estilizando links da rota ativa
+-------------------------------------
+*	Cria-se a configuração da classe do CSS com uma cor de fundo mai clara
+*	inclui no link a referência ao routeLink ativo: routerLinkActive="Ativo" (igual a classe do CSS)
+
+18.5. Recebendo parâmetros da rota
+----------------------------------
+*	Para configurar a rota /com parâmetro: abrir app.module.ts
+*	Criar-se uma rota em Routes com um parâmetro(token)
+	 { path: 'lancamentos/:codigo', component: LancamentoCadastroComponent },
+*	Abrir o objeto component referente à rota e injetar no construtor o ActivatedRoute
+	private route: ActivatedRoute
+*	No ngOnInit(), obter o parâmetro. Obs.: o nome do parâmetro está definido na rota em app.module.ts
+
+18.9. Implementando navegação imperativa
+----------------------------------------
+*	Precisa-se importar a diretiva Router (private router: Router)
+
+18.10. Fazendo redirecionamento
+-------------------------------
+*	Para redirecionar uma rota quendo o path estiver vazio:
+	Altera app.module.ts e incluir, por exemplo:
+	{ path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
+	
+18.11. Tratando rota não encontrada
+-----------------------------------
+*	Primeiro, criar um componente para informar a mensagem de página não encontrada.
+*	ng g c core/pagina-nao-encontrada --inline-style --inline-template --flat --skipTests=false
+	Esse comando já declara o componente na classe cor.module.ts
+*	Criar a rota em app.module.ts
+	{ path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },     e importar o componente.
+	{ path: '**', redirectTo: 'pagina-nao-encontrada' }			esse parâmetro deve ser o último
+*	Obs.:
+	As exportações:
+	exports: [
+		LancamentoCadastroComponent,
+		LancamentosPesquisaComponent
+	  ]
+	em lancamentos.module.ts não precisa ser exportada.
+	e em pessoas.module.ts
+	exports: [
+		PessoaCadastroComponent,
+		PessoasPesquisaComponent
+	  ],
+	ficando assim:
+	exports: [],
+	pois não estamos mais utilizando o componente pelo seletor, exemplo em app.component.html: 
+	<app-lancamentos-pesquisa></app-lancamentos-pesquisa>
+*	Obs.: os parâmetros em declarations continua sendo obrigado.
+	Exemplo em pessoa.module.ts:
+	declarations: [
+		PessoaCadastroComponent,
+		PessoasPesquisaComponent,
+		PessoasGridComponent
+	  ],
+
+18.12. Definindo o título da página dinamicamente
+-------------------------------------------------
+*	O título vem do index.html
+*	O Angular fornece um serviço que pode ser usado para mudar o nome do sistema injetnado o serviço:
+	private title: Title no ...component.ts
+	em seguinda no OnInit() incluir this.title.setTitle('Pesauisa de Lançamento');
+	depois o serviço deve ser registrado no providers, no caso vamos colocar em core.module.ts
+	
+18.13. Refatorando as rotas para usar Routing Module
+----------------------------------------------------
+*	Criar um arquivo apenas para configurar as rotas da aplicação.
+*	Criar arquivo na pasta app com nome app-routing.module.ts
+*	Importar AppRoutingModule em app.module.ts
+
+18.14. Criando um Routing Module para o módulo de funcionalidade
+----------------------------------------------------------------
+*	Criar um module de rota para cada grupo de funcionalidade do sistema. Como exemplo o módulo de lancamentos:
+	Criado: em lancamentos, lancamentos-routing.module.ts que o módulo de rotas para o módulo de lancamentos.
+*	Quando se configura as rotas no módulo raiz o RouterModule chama o forRoot (RouterModule.forRoot(routes))
+	Quando se configura as rotas filhas, chama o forchild
+*	o lancamentos.module.ts não precisa mais importar  o RouterModule, já que o LancamentosRoutingModule ja 
+	exporta o RouterModule: exports: [RouterModule].
+*	O lancamentos.module.ts irá agora importar o LancamentosRoutingModule
+
+19.2. Revisando a segurança da API com OAuth 2 e JWT
+================================================================================================================
+*	--spring.profiles.active-oauth-security
+
+	Gerando o código executável:
+		Executar na pasta raiz do projeto: 
+			mvn package
+
+	Executar na pasta target:
+
+	java -jar algamoney-api-1.0.0-SNAPSHOT.jar --spring.datasource.username=root --spring.datasource.password=root --algamoney.origin-permitida=http://localhost:4200 --spring.profiles.active-oauth-security
+	
+	Para abrir o sistema: localhost:4200
+================================================================================================================
+	
+19.5. Decodificando o JWT e armazenando no Local Storage
+--------------------------------------------------------
+*	Instalar via npm nova biblioteca para trabalhar com o 	jwt (token)
+	
+	npm install angular2-jwt --save
+	
+	npm install @auth0/angular-jwt			utilizei essa versão
+
+*	adicionar em core.module.ts a classe utilitária em providers, Jwthelper, para fornecer o serviço para a aplicação inteira.
+* 	em auth.service.ts, injetar private jwtHelper: Jwthelper
+*	Será preciso decodificar o token. Para relembrar, ver o site https://jwt.io/, para receber o objeto 'payload' com os dados	
+	que compoem o token.
+	
+19.11. Interceptando chamadas HTTP para tratar a expiração do access token
+--------------------------------------------------------------------------
+*	Criaremos um novo arquivo chamado, por exemplo, money-http.ts na pasta seguranca  que irá herdar da classe AuthHttp
+	a fim de que possamos tratar e agir quando cada método existente for acionado (post, get, put, delete, etc.)
+	
+19.13. Protegendo rotas com guarda de rotas (CanActivate)
+---------------------------------------------------------
+*	Serve para que o usuário não navegue em determinadas URL do sistema em que o mesmo não tem acesso.
+*	Gerar a guarda de segurança: ng g g seguranca/auth --skipTests=false
+*	Após criar a guarda, deve-se fornecer o seriços para o sistema. Colocamos em providers (em seguranca.module.ts)
+	o AuthGuard criado (auth.guard.ts)
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-	
+	
+23.1. Criando o módulo Dashboard
+================================
+
+*	Vamos criar um gráfico de linha e gráfico de pizza;
+*	vamos criar um componente e rotas;
+*	ng g m dashboard --routing
+*	em DashboardModule importar o ShareModule do sistema
+*	ng g c dashboard/dashboard
+*	alterar AppRoutingModule para incluir a chamada da rota 
+	{ path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule'}
+*	configurar a rota em DashboardRoutingModule
+*	Vamos colocar a página principal sendo a página de dashboard:
+	1. quando o path não for informado em AppRoutingModule o sistema direciona para a página de login;
+	2. abrir LoginFormComponent para direcionar para a página de dashboard alterando de lancamentos para dashboard (método login)
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+20.2. Fazendo build para o ambiente de produção
+-----------------------------------------------
+*	ng build --environment=prod	
+*	ng build --prod
+
+
+========================================
+Observações:
+- problemas de locale: pode-se, por exemplo, alterar o package.json e alterar:
+ "scripts": {
+    "ng": "ng",
+    "start": "ng serve --locale=pt",
+    "build": "ng build",
+	
+- O comando 'npm start' equivale ao 'npm serve' nos casos onde a definição esteja igual às acima no "scripts"
+	
+- checar versão de uma biblioteca qualquer:
+	npm info primeng
+	
+- reinstalat todos os pacotes definidos em package.json:
+	npm install
+
