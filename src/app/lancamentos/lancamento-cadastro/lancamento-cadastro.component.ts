@@ -1,14 +1,15 @@
+import { Title } from '@angular/platform-browser';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { SelectItem } from 'primeng/api';
-import { CategoriaService } from './../../categorias/categoria.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { MessageService } from 'primeng/components/common/messageservice';
+
 import { ErrorHandlerService } from './../../core/error-handler.service';
+import { CategoriaService } from './../../categorias/categoria.service';
 import { PessoaService } from './../../pessoas/pessoa.service';
 import { Lancamento } from './../../core/model';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { LancamentoService } from '../lancamento.service';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-lancamento-cadastro',
@@ -27,11 +28,11 @@ export class LancamentoCadastroComponent  implements OnInit {
 
   categorias = [];
   pessoas = [];
-  // lancamento = new Lancamento();
   formulario: FormGroup;
 
-  types: SelectItem[];
   selecionado: string;
+
+  uploadedFiles: any[] = [];
 
   constructor(
     private categoriaService: CategoriaService,
@@ -42,13 +43,7 @@ export class LancamentoCadastroComponent  implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private title: Title,
-    private formBuilder: FormBuilder) {
-    // this.types = [
-    //   {label: 'Paypal', value: 'PayPal', icon: 'fa fa-fw fa-cc-paypal'},
-    //   {label: 'Visa', value: 'Visa', icon: 'fa fa-fw fa-cc-visa'},
-    //   {label: 'MasterCard', value: 'MasterCard', icon: 'fa fa-fw fa-cc-mastercard'}
-    // ];
-  }
+    private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.configurarFormulario();
@@ -66,7 +61,21 @@ export class LancamentoCadastroComponent  implements OnInit {
 
     this.carregarCategorias();
     this.carregarPessoas();
+  }
 
+  onUpload(event) {
+    this.messageService
+      .add({severity: 'info', summary: 'Success', detail: 'File Uploaded with Auto Mode'});
+  }
+
+  antesUploadAnexo(event) {
+    (<XMLHttpRequest>event.xhr).setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    // event.xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    // event.xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+  }
+
+  get urlUploadAnexo() {
+    return this.lancamentoService.urlUploadAnexo();
   }
 
   configurarFormulario() {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Pessoa } from './../../core/model';
+import { Pessoa, Contato } from './../../core/model';
 import { PessoaService } from '../pessoa.service';
 import { ErrorHandlerService } from './../../core/error-handler.service';
 import { MessageService } from 'primeng/api';
@@ -14,7 +14,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class PessoaCadastroComponent implements OnInit {
 
+  // exibindoFormularioContato = false;
   pessoa = new Pessoa();
+  // contato: Contato;
+  // contatoIndex: number;
 
   constructor(
     private pessoaService: PessoaService,
@@ -38,6 +41,37 @@ export class PessoaCadastroComponent implements OnInit {
     //   }.bind(this), 1);
     // }
   }
+
+  // prepararNovoContato() {
+  //   this.exibindoFormularioContato = true;
+  //   this.contato = new Contato();
+  //   this.contatoIndex = this.pessoa.contatos.length;
+  // }
+
+  // prepararEdicaoContato(contato: Contato, index: number) {
+  //   this.contato = this.clonarContato(contato);
+  //   this.exibindoFormularioContato = true;
+  //   this.contatoIndex = index;
+  // }
+
+  // removerContato(index: number) {
+  //   this.pessoa.contatos.splice(index, 1);
+  //   // delete this.pessoa.contatos[index];
+  // }
+
+  // confirmarContato(frm: FormControl) {
+  //   // retirar a partir dos dados do contato do formulário e criar o objeto
+  //   // que será passado para a classe pessoa que será utilizada na atualização da pessoa
+  //   // this.pessoa.contatos.push(this.clonarContato(this.contato));
+  //   this.pessoa.contatos[this.contatoIndex] = this.clonarContato(this.contato);
+  //   this.exibindoFormularioContato = false;
+  //   frm.reset();
+  // }
+
+  // clonarContato(contato: Contato): Contato {
+  //   return new Contato(contato.codigo,
+  //     contato.nome, contato.email, contato.telefone);
+  // }
 
   carregarPessoas(codigo: number) {
     return this.pessoaService.buscarPorCodigo(codigo)
@@ -93,4 +127,5 @@ export class PessoaCadastroComponent implements OnInit {
     }.bind(this), 1);
     this.router.navigate(['/pessoas/nova']);
   }
+
 }

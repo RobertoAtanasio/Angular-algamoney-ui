@@ -65,6 +65,26 @@
           formControlName="observacao"></textarea>
       </div>
 
+      <!-- <div class="ui-g-12 ui-fluid"> -->
+      <div class="ui-g-6 ui-g-offset-6 ui-md-2 ui-md-offset-10 ui-fluid">
+
+          <p-fileUpload name="anexo" mode="basic" [url]="urlUploadAnexo"
+            accept="image/*,application/*" maxFileSize="1000000" (onUpload)="onUpload($event)"
+            (onBeforeSend)="antesUploadAnexo($event)"
+            chooseLabel="Anexar">
+          </p-fileUpload>
+
+          <!-- <p-fileUpload mode="basic" [url]="urlUploadAnexo" accept="image/*,application/*"
+            maxFileSize="1000000"
+            (onUpload)="onUpload($event)" (onBeforeSend)="antesUploadAnexo($event)" >
+          </p-fileUpload> -->
+
+          <!-- <p-fileUpload name="anexo" mode="basic" auto="true" maxFileSize="1000000"
+            chooseLabel="Anexar" accept="iamge/*,application/*"
+            [url]="urlUploadAnexo" (onBeforeSend)="antesUploadAnexo($event)">
+          </p-fileUpload> -->
+      </div>
+
       <div class="ui-g-12">
         <button pButton type="submit" label="Salvar" [disabled]="formulario.invalid"></button>
         <button pButton type="button" label="Novo" class="ui-button-warning ml-2"

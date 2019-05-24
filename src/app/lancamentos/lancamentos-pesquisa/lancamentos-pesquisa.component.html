@@ -61,7 +61,7 @@
               class="js-botao-tab"
               [routerLink]="['/lancamentos', lanc.codigo]"></button>
             <button pButton icon="fas fa-trash-alt" pTooltip="Excluir" tooltipPosition="top"
-              (click)="confirmaExclusao(lanc.codigo)" class="js-botao-tab"
+              (click)="confirmaExclusao(lanc.codigo)" class="js-botao-tab ml-1"
               [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')"></button>
           </td>
         </tr>

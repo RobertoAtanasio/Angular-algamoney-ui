@@ -14,7 +14,9 @@ import { ErrorHandlerService } from './error-handler.service';
 import { LancamentoService } from './../lancamentos/lancamento.service';
 import { PessoaService } from './../pessoas/pessoa.service';
 import { CategoriaService } from './../categorias/categoria.service';
+import { DasboardService } from '../dashboard/dasboard.service';
 import { MessageService } from 'primeng/api';
+import { RelatoriosService } from '../relatorios/relatorios.service';
 import { LOCALE_ID } from '@angular/core';
 
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
@@ -58,6 +60,8 @@ export function tokenGetter() {
     MessageService,
     ConfirmationService,
     CategoriaService,
+    DasboardService,
+    RelatoriosService,
     Title,
     AuthService,
     { provide: LOCALE_ID, useValue: 'pt-BR' }

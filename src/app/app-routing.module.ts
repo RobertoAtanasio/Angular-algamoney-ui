@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'pessoas', loadChildren: './pessoas/pessoas.module#PessoasModule' },
   { path: 'login', loadChildren: './seguranca/seguranca.module#SegurancaModule' },
   { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule'},
+  { path: 'relatorios', loadChildren: './relatorios/relatorios.module#RelatoriosModule'},
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'nao-autorizado', component: NaoAutorizadoComponent },

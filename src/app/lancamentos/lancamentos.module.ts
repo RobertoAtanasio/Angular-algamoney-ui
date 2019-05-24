@@ -14,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { ToastModule } from 'primeng/toast';
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
@@ -39,6 +40,7 @@ import { LancamentosRoutingModule } from './lancamentos-routing.module';
     CalendarModule,
     SelectButtonModule,
     DropdownModule,
+    FileUploadModule,
 
     CurrencyMaskModule,
 

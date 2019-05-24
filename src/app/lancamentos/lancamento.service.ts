@@ -11,7 +11,7 @@ import {
 import * as moment from 'moment';
 import { Lancamento } from './../core/model';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 
 export class LancamentoFiltro {
@@ -32,6 +32,12 @@ export class LancamentoService {
 
   constructor(private http: HttpClient) {
     this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
+  }
+
+  urlUploadAnexo(): string {
+    // const headers = new HttpHeaders()
+    // .set('Content-Type', 'multipart/form-data');
+    return `${this.lancamentosUrl}/anexo`;
   }
 
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
@@ -98,8 +104,7 @@ export class LancamentoService {
             return event;
           }
         ),
-        catchError(this.handlerError) //,
-        // retry(1)
+        catchError(this.handlerError)
       );
   }
 

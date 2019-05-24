@@ -26,13 +26,18 @@ export class LancamentosPesquisaComponent implements OnInit {
   totalRegistros = 0;
   @ViewChild('tabela') grid;
 
+  // obs: o parâmetro 'auth' abaixo é necessário porque o componente html acessa uma
+  // propriedade desse componente (ver trecho abaixo do acesso no html):
+  // [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')". Mesmo sem fazer uma
+  // referência direta nesta classe!
+
   constructor(
     private lancamentoService: LancamentoService,
+    private auth: AuthService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
-    private title: Title,
-    private auth: AuthService) {}
+    private title: Title) {}
 
   ngOnInit() {
     // o evento (onLazyLoad)="aoMudarPagina($event)" da página já é carregado, logo a função será executada

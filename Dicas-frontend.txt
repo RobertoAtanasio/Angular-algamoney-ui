@@ -418,6 +418,119 @@ ng g c navbar --spec=false
 	1. quando o path não for informado em AppRoutingModule o sistema direciona para a página de login;
 	2. abrir LoginFormComponent para direcionar para a página de dashboard alterando de lancamentos para dashboard (método login)
 
+23.2. Plotando gráficos com dados estáticos
+===========================================
+
+*	abrir o html do componente
+*	em DashboardModule importar do primeng o componente PanelModule e ChartModule
+*	Para a geração dos gráficos é necessário instalar a biblioteca chart.js via npm install chart.js --save
+*	incluir em angular.json a importação do chart.js gerado pela instalação via npm acima:
+	"scripts": [
+		"node_modules/chart.js/dist/Chart.js"
+    ]
+	
+23.3. Criando o serviço da Dashboard - Gráficos
+====================================
+
+*	Vamos cosntruir o serviço para o acesso aos dados no banco de dados;
+*	Criar a classe de serviço: ng g s dashboard/dasboard 
+*	Importar DasboardService em providers do módulo core.module.ts
+*	Alterar o DashboardComponent para ler o serviço de acesso aos lançamentos por categoria e por dia e gerar os gráficos
+
+23.6. Formatando labels no Chart.JS
+===================================
+
+*	Configurar em DashboardComponent:
+*	Importar no construtor private decimalPipe: DecimalPipe
+*	Incluir em DashboardModule no @NgModule o Providers com o DecimalPipe
+
+23.7. Criando módulo de relatórios
+==================================
+
+*	Criar módulo de relatórios: ng g m relatorios --routing
+*	Importar o SharedModule do sistema: import { SharedModule } from '../shared/shared.module'; em RelatoriosModule
+*	Criar o componente: ng g c relatorios/relatorio-lancamentos
+*	Abrir app-routine.module.ts (AppRoutingModule) para criar a rota raiz dos relatórios
+	{ path: 'relatorios', loadChildren: './relatorios/relatorios.module#RelatoriosModule'}
+*	Configurar a rota em RelatoriosRoutingModule
+	const routes: Routes = [
+	  {
+		path: '',
+		component: RelatorioLancamentosComponent,
+		canActivate: [ AuthGuard ],
+		data: { roles: ['ROLE_PESQUISAR_LANCAMENTO']}
+	  }
+	];
+
+23.9. Exibindo o PDF para o usuário
+===================================
+
+*	Cria chamada AJAX para receber dados binários;
+*	Criar o serviço de acesso aos dados do relatório:
+	ng g s relatorios/relatorios
+*	Injetar o serviço no providers do core.module para ficar disponível para os demais módulos do sistema;
+
+
+23.11. Listando contatos na tela mestre-detalhe
+===============================================
+
+*	Abrir pessoa-cadastro.component.html para os ajustes nessa tela;
+*	Abrir PessoasModule e importar PanelModule
+*	Criar a classe contato em model.ts e incluir o contato na classe Pessoa
+
+23.12. Criando o diálogo de contato
+===================================
+
+*	Em PessoasModule, importar o componente do primeng DialogModule;
+*	Em pessoa-cadastro.component.html, implementar a tag p-dialog
+
+23.13. Criando o formulário de contato
+======================================
+
+*	Em PessoasModule deve importar o componente InputMaskModule
+*	Obs.: no trecho do html:
+	<p-dialog header="Novo Contato" [(visible)]="exibindoFormularioContato"
+		modal="modal" *ngIf="contato">
+	Se não for incluído a diretiva *ngIf, o "compilador" vai dá erro, pois a pagína será rederizada e o componente "contato"
+	ainda não foi instaciado.
+
+23.14. Incluindo um novo contato
+================================
+
+*	Incluir um construtor na classe Contato em model.ts
+*	O componente "FormControl" deve ser importado em PessoaCadastroComponent
+
+23.18. Criando componente de contatos
+=====================================
+
+*	Criar novo componente:
+	ng g c pessoas/pessoa-cadastro-contato
+*	Em PessoaCadastroContatoComponent, criar os atributos que faram referência no html do componente:
+	contatos: Array<Contato>;
+	ontato: Contato;
+*	renomear a tag: <p-table [value]="pessoa.contatos" para [value]="contatos"
+*	No componente, retirar a referência "pessoa" para se referenciar a "contatos", pois a referência no componente
+	é sobre os contatos.
+*	Os contatos do objeto pessoa deve ser passado para o componente criado para os contatos, logo, deverá ser incluir 
+	o depurador @Input no componente criado. A forma da passagem desse parâmento no html é o seguinte:
+	<app-pessoa-cadastro-contato [contatos]="pessoa.contatos"></app-pessoa-cadastro-contato>
+*	O parâmetro [contatos]="pessoa.contatos" passa a lista de contatos para o componente;
+*	Obs: a tag <p-dialog> foi transferida para o componente porque a mesma é utilizada pelo componente e não pela tela principal
+*	Para mudar em tempo de execução o título da tela de contato, alterar a tag
+	<p-dialog header="Novo Contato"... para
+	<p-dialog [header]="editando ? 'Edição Contato' : 'Novo Contato'"
+
+23.19. Upload com o componente FileUpload
+=========================================
+
+*	Efetuar o upload de um anexo;
+*	Vamos utilizar um componente do PrimeNg
+*	Abrir as classes lancamento-cadastro-component.ts e Lancamento-cadastro-component.html
+*	Em lancamentos.module.ts, importar o componente do upload: import { FileUploadModule } from 'primeng/fileupload';
+*	Abrir LancamentoService para criar o método de acesso da URL: urlUploadAnexo() {}
+*	Na classe do componente lancamento-cadastro-component.ts, criar o método para acesso a esse serviço;
+s
+
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
