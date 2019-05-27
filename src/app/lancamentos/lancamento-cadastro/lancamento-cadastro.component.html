@@ -65,28 +65,81 @@
           formControlName="observacao"></textarea>
       </div>
 
-      <!-- <div class="ui-g-12 ui-fluid"> -->
-      <div class="ui-g-6 ui-g-offset-6 ui-md-2 ui-md-offset-10 ui-fluid">
+      <div class="ui-g-6 ui-g-offset-6 ui-md-2 ui-md-offset-10 ui-fluid"
+        *ngIf="!nomeAnexo">
+        <p-fileUpload name="anexo" mode="basic" auto="true" maxFileSize="100000000"
+          chooseLabel="Anexar" accept="image/*,application/*"
+          [url]="urlUploadAnexo"
+          (onBeforeSend)="antesUploadAnexo($event)"
+          (onUpload)="aoTerminarUploadAnexo($event)"
+          (onErroo)="erroUpload($event)"
+          [hidden]="uploadEmAndamento"></p-fileUpload>
 
-          <p-fileUpload name="anexo" mode="basic" [url]="urlUploadAnexo"
-            accept="image/*,application/*" maxFileSize="1000000" (onUpload)="onUpload($event)"
-            (onBeforeSend)="antesUploadAnexo($event)"
-            chooseLabel="Anexar">
-          </p-fileUpload>
-
-          <!-- <p-fileUpload mode="basic" [url]="urlUploadAnexo" accept="image/*,application/*"
-            maxFileSize="1000000"
-            (onUpload)="onUpload($event)" (onBeforeSend)="antesUploadAnexo($event)" >
-          </p-fileUpload> -->
-
-          <!-- <p-fileUpload name="anexo" mode="basic" auto="true" maxFileSize="1000000"
-            chooseLabel="Anexar" accept="iamge/*,application/*"
-            [url]="urlUploadAnexo" (onBeforeSend)="antesUploadAnexo($event)">
-          </p-fileUpload> -->
+        <p-progressSpinner [hidden]="!uploadEmAndamento"
+          [style]="{ width: '25px', height: '25px' }"></p-progressSpinner>
       </div>
 
+      <div class="ui-g-12" dir="rtl"
+        *ngIf="nomeAnexo">
+
+        <button pButton type="button" class="ui-button-danger"
+          icon="fa-close" pTooltip="Remover anexo" tooltipPosition="top"
+          (click)="removerAnexo()"></button>
+
+        <a target="_blank" pTooltip="Baixar anexo" tooltipPosition="top"
+          [href]="this.formulario.get('urlAnexo').value">{{ nomeAnexo }}</a>
+
+      </div>
+
+      <!-- <div class="container">
+          <div class="row">
+              <div class="col-md-6 offset-md-3">
+                  <h3>Choose File</h3>
+                  <form (ngSubmit)="onSubmit()">
+                      <div class="form-group">
+                          <input type="file" name="image" accept="image/*,application/*"
+                          (change)="onFileChange($event);" />
+                      </div>
+                      <div class="form-group">
+                          <button class="btn btn-primary">Submit</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div> -->
+
+      <!-- <div class="ui-g-12 ui-fluid">
+          <form (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                  <input type="file" name="image"  />
+              </div>
+              <div class="form-group">
+                  <button class="btn btn-primary">Submit</button>
+              </div>
+          </form>
+      </div> -->
+
+        <!-- <p-fileUpload name="anexo" [url]="urlUploadAnexo" (onUpload)="onUpload($event)"
+          multiple="multiple" accept="image/*,application/*" maxFileSize="10000000"
+          (onBeforeSend)="antesUploadAnexo($event)">
+          <ng-template pTemplate="content">
+              <ul *ngIf="uploadedFiles.length">
+                  <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+              </ul>
+          </ng-template>
+        </p-fileUpload> -->
+
+        <!-- <form >
+          <div class="form-group">
+              <input type="file" name="image"  />
+          </div>
+          <div class="form-group">
+              <button class="btn btn-primary" (click)="upload()">Submit</button>
+          </div>
+        </form> -->
+
       <div class="ui-g-12">
-        <button pButton type="submit" label="Salvar" [disabled]="formulario.invalid"></button>
+        <button pButton type="submit" label="Salvar" [disabled]="formulario.invalid || uploadEmAndamento"></button>
         <button pButton type="button" label="Novo" class="ui-button-warning ml-2"
           (click)="novo()"></button>
         <a routerLink="/lancamentos" class="ml-2">Voltar para a pesquisa</a>

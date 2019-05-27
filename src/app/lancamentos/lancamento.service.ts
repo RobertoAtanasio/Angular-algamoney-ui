@@ -6,7 +6,8 @@ import {
   HttpParams,
   HttpErrorResponse,
   HttpEvent,
-  HttpResponse } from '@angular/common/http';
+  HttpResponse,
+  HttpEventType  } from '@angular/common/http';
 
 import * as moment from 'moment';
 import { Lancamento } from './../core/model';
@@ -30,14 +31,44 @@ export class LancamentoService {
   // retorno: any;
   lancamentosUrl: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private httpClient: HttpClient) {
     this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
   }
 
   urlUploadAnexo(): string {
-    // const headers = new HttpHeaders()
-    // .set('Content-Type', 'multipart/form-data');
     return `${this.lancamentosUrl}/anexo`;
+  }
+
+  upload(data) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'multipart/form-data');
+    const uploadURL = `${this.lancamentosUrl}/anexo`;
+    // console.log('>>> uploadURL', uploadURL, data);
+    // return this.httpClient.post(uploadURL, data, {
+    //     headers,
+    //     reportProgress: true,
+    //     observe: 'events'
+    //   }).pipe(map( event => {
+    //     console.log('>>> pipe', event.type);
+    //     switch (event.type) {
+    //       case HttpEventType.UploadProgress:
+    //         const progress = Math.round(100 * event.loaded / event.total);
+    //         return { status: 'progress', message: progress };
+
+    //       case HttpEventType.Response:
+    //         return event.body;
+
+    //       default:
+    //         return `Unhandled event: ${event.type}`;
+    //     }
+    //   })
+    // );
+
+    return this.httpClient.post(uploadURL, data, { headers })
+      .toPromise()
+      .then(response => {
+        return response;
+      });
   }
 
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
@@ -66,7 +97,7 @@ export class LancamentoService {
     //   err => console.log('Houve erro', err)
     // );
 
-    return this.http.get(`${this.lancamentosUrl}?resumo`, { params })
+    return this.httpClient.get(`${this.lancamentosUrl}?resumo`, { params })
       .toPromise()
       .then(response => {
         return response;
@@ -94,7 +125,7 @@ export class LancamentoService {
         moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'));
     }
 
-    return this.http.get<any> (`${this.lancamentosUrl}?resumo`, { params })
+    return this.httpClient.get<any> (`${this.lancamentosUrl}?resumo`, { params })
       .pipe(
         map((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
@@ -114,7 +145,7 @@ export class LancamentoService {
   }
 
   excluir(codigo: number): Promise<void> {
-      return this.http.delete(`${this.lancamentosUrl}/${codigo}`)
+      return this.httpClient.delete(`${this.lancamentosUrl}/${codigo}`)
       .toPromise()
       .then(() => null);
   }
@@ -122,7 +153,7 @@ export class LancamentoService {
   adicionar(lancamento: Lancamento): Promise<any> {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json');
-    return this.http.post(this.lancamentosUrl, lancamento, { headers })
+    return this.httpClient.post(this.lancamentosUrl, lancamento, { headers })
       .toPromise()
       .then(response => response);
   }
@@ -131,7 +162,7 @@ export class LancamentoService {
     const headers = new HttpHeaders()
     .set('Content-Type', 'application/json');
 
-    return this.http.put(`${this.lancamentosUrl}/${lancamento.codigo}`, lancamento, { headers })
+    return this.httpClient.put(`${this.lancamentosUrl}/${lancamento.codigo}`, lancamento, { headers })
       .toPromise()
       .then(response => {
         const lancamentoAlterado = response;
@@ -143,7 +174,7 @@ export class LancamentoService {
   }
 
   buscarPorCodigo(codigo: number): Promise<any> {
-    return this.http.get(`${this.lancamentosUrl}/${codigo}`)
+    return this.httpClient.get(`${this.lancamentosUrl}/${codigo}`)
       .toPromise()
       .then(response => {
         const lancamento = response;

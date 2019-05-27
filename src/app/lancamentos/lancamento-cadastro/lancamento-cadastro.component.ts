@@ -29,10 +29,13 @@ export class LancamentoCadastroComponent  implements OnInit {
   categorias = [];
   pessoas = [];
   formulario: FormGroup;
+  uploadEmAndamento = false;
 
   selecionado: string;
 
   uploadedFiles: any[] = [];
+
+  fileData: File = null;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -63,16 +66,81 @@ export class LancamentoCadastroComponent  implements OnInit {
     this.carregarPessoas();
   }
 
+  fileProgress(fileInput: any) {
+    console.log('<<< aqui >>>');
+    this.fileData = <File>fileInput.target.files[0];
+  }
+
+  onFileChange(event) {
+    if (event.target.files.length > 0) {
+      this.fileData = event.target.files[0];
+    }
+  }
+
+  onSubmit() {
+    console.log('>>> upload', this.fileData);
+    // const formData = new FormData();
+    // formData.append('file', this.fileData);
+    return this.lancamentoService.upload(this.fileData);
+  }
+
   onUpload(event) {
-    this.messageService
-      .add({severity: 'info', summary: 'Success', detail: 'File Uploaded with Auto Mode'});
+    for(const file of event.files) {
+        this.uploadedFiles.push(file);
+    }
+    this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
   }
 
   antesUploadAnexo(event) {
-    (<XMLHttpRequest>event.xhr).setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
+    console.log('>>>', event);
+
+    // event.xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    // (<XMLHttpRequest>event.xhr).setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
     // event.xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
     // event.xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+
+    this.uploadEmAndamento = true;
   }
+
+  aoTerminarUploadAnexo(event) {
+    const anexo = JSON.parse(event.xhr.response);
+
+    this.formulario.patchValue({
+      anexo: anexo.nome,
+      urlAnexo: anexo.url
+    });
+
+    this.uploadEmAndamento = false;
+  }
+
+  erroUpload() {
+    console.log('>>> Houve Erro <<<');
+    this.messageService.add({
+      severity: 'danger',
+      detail: 'Erro ao tentar enviar anexo!'
+    });
+    this.uploadEmAndamento = false;
+  }
+
+  removerAnexo() {
+    this.formulario.patchValue({
+      anexo: null,
+      urlAnexo: null
+    });
+  }
+
+  get nomeAnexo() {
+    const nome = this.formulario.get('anexo').value;
+    if (nome) {
+      return nome.substring(nome.indexOf('_') + 1, nome.length);
+    }
+    return '';
+  }
+
+  // get urlAnexo() {
+  //   return this.formulario.get('urlAnexo').value;
+  // }
 
   get urlUploadAnexo() {
     return this.lancamentoService.urlUploadAnexo();
@@ -92,7 +160,9 @@ export class LancamentoCadastroComponent  implements OnInit {
       categoria: this.formBuilder.group({
         codigo: [ null, Validators.required ]
       }),
-      observacao: []
+      observacao: [],
+      anexo: [],
+      urlAnexo: []
     });
   }
 

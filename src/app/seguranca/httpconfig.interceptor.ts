@@ -41,7 +41,15 @@ export class HttpConfigInterceptor implements HttpInterceptor {
           request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
       }
 
-      request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
+      if (request.url.includes('/lancamentos/anexo')) {
+        request = request.clone({ headers: request.headers.set('Content-Type', 'multipart/form-data') });
+        console.log('>> interceptors URL:', request.url);
+        console.log('>> interceptors headers:', request.headers);
+      }
+
+      if (!request.url.includes('/lancamentos/anexo')) {
+        request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
+      }
 
       if (this.auth.isAccessTokenInvalido()) {
         this.auth.obterNovoAccessToken()
