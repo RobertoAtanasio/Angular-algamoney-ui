@@ -16,6 +16,9 @@ export class PessoaCadastroComponent implements OnInit {
 
   // exibindoFormularioContato = false;
   pessoa = new Pessoa();
+  estados: any[];
+  cidades: any[];
+  estadoSelecionado: number;
   // contato: Contato;
   // contatoIndex: number;
 
@@ -31,8 +34,10 @@ export class PessoaCadastroComponent implements OnInit {
   ngOnInit() {
     this.title.setTitle('Nova Pessoa');
     const codigoPessoa  = this.route.snapshot.params['codigo']
+    this.carregarEstados();
     if (codigoPessoa) {
-      this.title.setTitle('Edição de Pessoa');
+      // this.title.setTitle('Edição de Pessoa');
+      this.atualizarTituloEdicao();
       this.carregarPessoas(codigoPessoa);
     }
     // if (typeof codigoPessoa === 'string') {
@@ -73,10 +78,36 @@ export class PessoaCadastroComponent implements OnInit {
   //     contato.nome, contato.email, contato.telefone);
   // }
 
+  carregarEstados() {
+    this.pessoaService.listarEstados()
+      .then(lista => {
+        this.estados = lista.map( uf  => ({ label: uf.nome, value: uf.codigo }) )
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  alterouEstado() {
+    this.pessoa.endereco.cidade.codigo = null;
+    this.carregarCidades();
+  }
+
+  carregarCidades() {
+    this.pessoaService.pesquisarCidades(this.estadoSelecionado).then(lista => {
+      this.cidades = lista.map(c => ({ label: c.nome, value: c.codigo }));
+    })
+    .catch(erro => this.errorHandler.handle(erro));
+  }
+
   carregarPessoas(codigo: number) {
     return this.pessoaService.buscarPorCodigo(codigo)
       .then((data) => {
         this.pessoa = data;
+        this.estadoSelecionado = (this.pessoa.endereco.cidade) ?
+              this.pessoa.endereco.cidade.estado.codigo : null;
+        if (this.estadoSelecionado) {
+          this.carregarCidades();
+        }
+        this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -126,6 +157,10 @@ export class PessoaCadastroComponent implements OnInit {
       this.pessoa = new Pessoa();
     }.bind(this), 1);
     this.router.navigate(['/pessoas/nova']);
+  }
+
+  atualizarTituloEdicao() {
+    this.title.setTitle(`Edição de pessoa: ${this.pessoa.nome}`);
   }
 
 }

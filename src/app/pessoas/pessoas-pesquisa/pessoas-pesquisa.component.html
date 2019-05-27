@@ -39,8 +39,8 @@
       <ng-template pTemplate="body" let-pessoa>
         <tr>
           <td>{{pessoa.nome}}</td>
-          <td class="col-cidade">{{pessoa.endereco.cidade}}</td>
-          <td class="col-estado">{{pessoa.endereco.estado}}</td>
+          <td class="col-cidade">{{pessoa.endereco.cidade?.nome}}</td>
+          <td class="col-estado">{{pessoa.endereco.cidade?.estado.nome}}</td>
 
           <td class="col-status">
             <a href="javascript:;"

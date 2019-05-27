@@ -15,9 +15,13 @@ export class PessoaFiltro {
 export class PessoaService {
 
   pessoaUrl: string;
+  estadosUrl: string;
+  cidadesUrl: string;
 
   constructor(private http: HttpClient) {
     this.pessoaUrl = `${environment.apiUrl}/pessoas`;
+    this.estadosUrl = `${environment.apiUrl}/estados`;
+    this.cidadesUrl = `${environment.apiUrl}/cidades`;
   }
 
   pesquisar(filtro: PessoaFiltro): Promise<any> {
@@ -38,7 +42,7 @@ export class PessoaService {
       .catch(response => {
         console.error('Erro ao pesquisar pessoas.', response);
         return response;
-      });;
+      });
   }
 
   listarTodas(): Promise<any> {
@@ -89,6 +93,29 @@ export class PessoaService {
     return this.http.put(`${this.pessoaUrl}/${pessoa.codigo}`, pessoa, { headers })
       .toPromise()
       .then(response => {
+        return response;
+      });
+  }
+
+  listarEstados(): Promise<any> {
+    return this.http.get(this.estadosUrl)
+      .toPromise()
+      .then(response => response)
+      .catch(response => {
+        console.error('Erro ao pesquisar estados.', response);
+        return response;
+      });
+  }
+
+  pesquisarCidades(estado): Promise<any> {
+    const params = new HttpParams()
+      .set('estado', estado);
+
+    return this.http.get(this.cidadesUrl, { params })
+      .toPromise()
+      .then(response => response)
+      .catch(response => {
+        console.error('Erro ao pesquisar cidades.', response);
         return response;
       });
   }

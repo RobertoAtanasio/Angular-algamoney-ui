@@ -3,7 +3,7 @@
 
     <div class="ui-g">
       <div class="ui-g-12">
-        <h3><span style='font-weight:bold;'>Nova Pessoa</span></h3>
+        <h3><span style='font-weight:bold;'>{{editando ? 'Edição de' : 'Nova'}} Pessoa</span></h3>
       </div>
 
       <div class="ui-g-12 ui-fluid">
@@ -59,21 +59,34 @@
       </div>
 
       <div class="ui-g-12 ui-md-6 ui-fluid">
-        <label>Cidade</label>
-        <input pInputText type="text" name="cidade"
-        [(ngModel)]="pessoa.endereco.cidade" #cidade="ngModel" required>
-
-        <app-message [control]="cidade" error="required"
-          text="Informe a cidade"></app-message>
-      </div>
-
-      <div class="ui-g-12 ui-md-6 ui-fluid">
         <label>Estado</label>
-        <input pInputText type="text" name="estado"
-        [(ngModel)]="pessoa.endereco.estado" #estado="ngModel" required>
+
+        <p-dropdown placeholder="Selecione..." [autoWidth]="false"
+          [filter]="true" [options]="estados"
+          [(ngModel)]="estadoSelecionado" name="estadoSelecionado"
+          (onChange)="alterouEstado()"
+          #estado="ngModel" required></p-dropdown>
+
+        <!-- <input pInputText type="text" name="estado"
+        [(ngModel)]="pessoa.endereco.estado" #estado="ngModel" required> -->
 
         <app-message [control]="estado" error="required"
           text="Informe o estado"></app-message>
+      </div>
+
+      <div class="ui-g-12 ui-md-6 ui-fluid">
+        <label>Cidade</label>
+        <p-dropdown placeholder="Selecione..." [autoWidth]="false"
+          [filter]="true" [options]="cidades"
+          [(ngModel)]="pessoa.endereco.cidade.codigo" name="cidade"
+          #cidade="ngModel" required
+          [disabled]="!estadoSelecionado"></p-dropdown>
+
+        <!-- <input pInputText type="text" name="cidade"
+        [(ngModel)]="pessoa.endereco.cidade" #cidade="ngModel" required> -->
+
+        <app-message [control]="cidade" error="required"
+          text="Informe a cidade"></app-message>
       </div>
 
       <div class="ui-g-12">

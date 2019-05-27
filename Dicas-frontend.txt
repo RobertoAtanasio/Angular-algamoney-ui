@@ -531,10 +531,18 @@ ng g c navbar --spec=false
 	após a tag do upload
 *	Em lancamento-cadastro.component.ts, criar a propriedade uploadEmAndamento
 	
-23.24. Salvando e removendo anexo
-=================================
 
-*	
+24.3. Buscando estados e cidades
+================================
+
+*	Criar as pesquisas no serviço de pessoas;
+*	Criar as classe Estado e Cidade em model.ts
+*	Ajustar a classe Endereco para fazer referência à classe Cidade;
+
+24.4. Preenchendo Dropdown de estados
+=====================================
+
+*	Em pessoas.module.ts, importar o componente do dropdown: 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -561,14 +569,5 @@ Observações:
 - reinstalat todos os pacotes definidos em package.json:
 	npm install
 
-Gerando o código executável:
-		Executar na pasta raiz do projeto: 
-			mvn package
 
-	Executar na pasta target:
-
-	java -jar algamoney-api-1.0.0-SNAPSHOT.jar --spring.datasource.username=root --spring.datasource.password=root --algamoney.origin-permitida=http://localhost:4200 --spring.profiles.active-oauth-security
-	
-	Para abrir o sistema: localhost:4200
-	
 	
