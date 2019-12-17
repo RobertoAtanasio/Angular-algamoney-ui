@@ -5,16 +5,32 @@
       <div class="ui-g-12">
         <h3><span style='font-weight:bold;'>{{editando ? 'Edição de' : 'Nova'}} Pessoa</span></h3>
       </div>
-
+      <!--
+      para uso da diretiva  [(ngModel)] é preciso importar o FormsModule
+      (import { FormsModule } from '@angular/forms';) e incluí-lo em
+      @NgModule({
+        :
+        imports: [
+          FormsModule,
+      -->
       <div class="ui-g-12 ui-fluid">
         <label>Nome</label>
-        <input pInputText type="text" name="nome"
-          [(ngModel)]="pessoa.nome" #nome="ngModel" required minlength="5">
+        <input pInputText type="text" name="nomex"
+          [(ngModel)]="pessoa.nome"
+          #nomex="ngModel"
+          required minlength="5">
 
-        <app-message [control]="nome" error="required"
+        <!-- <div *ngIf="nomex.hasError('required') && nomex.dirty">
+          <span>Informe o nome</span>
+        </div>
+        <div *ngIf="nomex.hasError('minlength') && nomex.dirty">
+          <span>Mínimo de 5 caracteres</span>
+        </div> -->
+
+        <app-message [control]="nomex" error="required"
           text="Informe o nome"></app-message>
-        <app-message [control]="nome" error="minlength"
-          text="Mínimo de {{ nome.errors?.minlength?.requiredLength }} caracteres"></app-message>
+        <app-message [control]="nomex" error="minlength"
+          text="Mínimo de {{ nomex.errors?.minlength?.requiredLength }} caracteres"></app-message>
       </div>
 
       <div class="ui-g-12 ui-md-9 ui-fluid">
@@ -91,9 +107,17 @@
 
       <div class="ui-g-12">
         <p-panel header="Contatos">
-            <app-pessoa-cadastro-contato [contatos]="pessoa.contatos"></app-pessoa-cadastro-contato>
-          </p-panel>
+          <app-pessoa-cadastro-contato [contatos]="pessoa.contatos"></app-pessoa-cadastro-contato>
+        </p-panel>
       </div>
+
+      <!-- <div class="ui-g-12">
+          <ul>
+              <li *ngFor="let pes of pessoa.contatos">
+                {{pes.nome}}
+              </li>
+          </ul>
+      </div> -->
 
       <div class="ui-g-12">
         <button pButton type="submit" label="Salvar" [disabled]="formCadPes.invalid"></button>

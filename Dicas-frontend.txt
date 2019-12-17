@@ -1,15 +1,27 @@
+npm install -g @angular/cli
+
+npm uninstall -g @angular/cli   --> para desistalar
+
+npm cache clean   --> usar quando desistalar
+
+ng --version      --> ver a versão do angular
+
 *	criar novo projeto:
 	ng new algamoney-ui
-	
+
+  cd algamoney-ui
+  ng serve --open
+  ng serve --open --port=4201     --> abrir em outra porta. Por default a porta é 4200
+
 *	instalar o primeng:
 	npm install primeng --save
 	npm install primeicons --save
-	
+
 *	para adicionar fonte awesone:
-	npm install font-awesome --save
-	
+	npm install font-awesome --save   --> o primeng usa esses ícones
+
 *	npm install ng2-currency-mask --save		// pacote para tratamento de máscaras em campo input de valor
-	import { CurrencyMaskModule } from "ng2-currency-mask";			// módulo para ser importado 
+	import { CurrencyMaskModule } from "ng2-currency-mask";			// módulo para ser importado
 
 *	ícones do primeng
 	Execute os seguintes passos:
@@ -23,38 +35,38 @@
 	3. Tive que executar o comando npm audit fix para os ícones aparecerem
 
 	exemplo em outra porta: ng serve --open --port=4201
-	
+
 *	npm i typescript@3.1.6 --save-dev --save-exact			// essa versão do typesccript é a que está funcionando
-	npm install typescript@">=3.1.1 <3.2.0" 
+	npm install typescript@">=3.1.1 <3.2.0"
 	npm install --save-dev @angular/cli@latest
 	npm install --save-dev @angular/cli@7.2.3				// essa versão do angular é a que está funcionando
-	
+
 	npm install --save-dev @angular/cli@1.1.2
-	
+
 	ng --version
-	
+
 	npm uninstall --save-dev angular-cli
 	npm install --save-dev @angular/cli@latest
 	npm install
-	
+
 *	gerar novo componente:
 	ng generate component bem-vindo --spec=false
 	ng g c bem-vindo --spec=false
-	
+
 *	instalar o bootstrap
-	npm install bootstrap
-	
+	npm install bootstrap --save
+
 	obs.: para importar a classe bootstrap.css, alterado o arquivo angular.json e incluído a entrada em "sryles":
 		"styles": [
 		  ...,
 		  "..node_modules/bootstrap/dist/css/bootstrap.css"
 		],
-		
+
 		*** Não encontrei esse arquivo. Resolvi incluindo a tag <script> do CSS ***
 
 *	Biblioteca Moment
 	npm install moment --save
-		
+
 *	Criando diretivas
 ---------------------
 	ng g directive campo-colorido --skipTests=false
@@ -62,26 +74,26 @@
 *	Criando Serviços:
 	ng g s teste
 	ng g s seguranca/logout
-	
-*	comando: 
+
+*	comando:
 	ng g m botoes										cria um novo módulo (module)
 	ng g c botoes/botao-grande --skipTests=false		cria um componente dentro do novo módulo
 
 	Gerar a guarda de segurança: ng g g seguranca/auth --skipTests=false
-	
+
 seguranca-routing
 ng generate module seguranca/seguranca-routing
 
 ========================================================================================================================================
 Gerando o código executável:
-	Executar na pasta raiz do projeto: 
-	
-	mvn package	
+	Executar na pasta raiz do projeto:
+
+	mvn package
 
 Executar a API na pasta target:
-	
+
 	java -jar algamoney-api-1.0.0-SNAPSHOT.jar --spring.datasource.username=root --spring.datasource.password=root --algamoney.origin-permitida=http://localhost:4200 --spring.profiles.active-oauth-security
-	
+
 ========================================================================================================================================
 
 Criando componente de barra de navegação
@@ -122,14 +134,14 @@ ng g c navbar --spec=false
   color: #c0bbb7;
   text-decoration: none;		// retira o sublinhado do link
 }
-	
+
 11.2. Respondendo a eventos do hospedeiro com @HostListener
 ---------------------------------------------------------------
-*	Utiliza-se o @HostListener mais um evento do HTML	
+*	Utiliza-se o @HostListener mais um evento do HTML
 
 11.3. Vinculando propriedades do hospedeiro com @HostBinding
 ------------------------------------------------------------
-*	com esta diretiva não é mais preciso utilizar o 
+*	com esta diretiva não é mais preciso utilizar o
 	constructor(
 		private elementRef: ElementRef,
 		private renderer: Renderer2
@@ -137,7 +149,7 @@ ng g c navbar --spec=false
 	this.renderer.setStyle(this.elementRef.nativeElement,
       'background-color', 'yellow');
 	e retira-se os importes de ElementRef e Renderer2
-	
+
 11.4. Usando property binding em diretivas customizadas
 -------------------------------------------------------
 *	cria-se uma propriedade. No nosso exemplo, a variável 'cor'.
@@ -168,16 +180,16 @@ ng g c navbar --spec=false
 ---------------------------------------------------------
 *	A fim de não repetir a inclusão de div de mensagem de erro, vamos criar um componente para tratar erros.
 *	Criar o componente: ng g c message --skipTests=false --inline-template --inline-style
-*	Obs: em 
+*	Obs: em
 	<app-message [control]="descricao" error="minlength"
 	  text="Mínimo de {{ descricao.errors?.minlength?.requiredLength }} caracteres">
 	</app-message>
 	o símbolo ? é um operador de segurança que testa se houver algum erro na expressão ao qual está associado, o sistema ignora
 	o erro, não apresentando nenhum mensagem e para o teste da validação da expressão.
-	
+
 14.2. Criando um módulo e exportando um componente
 --------------------------------------------------
-*	comando: 
+*	comando:
 	ng g m botoes										cria um novo módulo (module)
 	ng g c botoes/botao-grande --skipTests=false		cria um componente dentro do novo módulo
 *	No novo módulo criado, incluir o comando exports: [BotaoGrandeComponent] para exportar o novo componente criado para que
@@ -188,7 +200,7 @@ ng g c navbar --spec=false
 *	No trecho abaixo, a NavegacaoModule está importando o módulo do botão e reexportando o módulo do botão para ficar liberado
 	também o módulo do botão a quem for o módulo de navegação. Evitando com isso que o módulo que irá importar o módulo de
 	navegação também tenha que importar o módulo do botão.
-	
+
 	@NgModule({
 	  imports: [
 		CommonModule,
@@ -198,7 +210,7 @@ ng g c navbar --spec=false
 	  exports: [MenuComponent, BotoesModule]
 	})
 	export class NavegacaoModule { }
-	
+
 14.6. Criando um Feature Module
 -------------------------------
 *	Todos os componentes devem ser declarados no ...module.ts pai dos componentes.
@@ -214,7 +226,7 @@ ng g c navbar --spec=false
 	o Angula é quem faz a criação da classe e deixa disponível apenas uma instância da mesma para ser utilizada em qualquer
 	parte do sistema.
 *	A configuração desta forma: providers: [FuncionarioService], é um atalho para a injeção do objeto. A forma completa
-	é a seguinte: 
+	é a seguinte:
 	providers: [
 		{ provide: FuncionarioService, useClass: FuncionarioAbreviadoService }
 	],
@@ -223,7 +235,7 @@ ng g c navbar --spec=false
 
 15.5. Configurando o injetor com provider por fábrica
 -----------------------------------------------------
-*	Em 
+*	Em
 	providers: [
 		{ provide: FuncionarioService, useClass: FuncionarioAbreviadoService }
 	],
@@ -236,7 +248,7 @@ ng g c navbar --spec=false
 	providers: [
 		{ provide: FuncionarioService, useFactory: criarFuncionarioService }
 	  ]
-	
+
 
 ==================================================================================================================================
 16.2. Instalando e testando o json-server
@@ -260,7 +272,7 @@ ng g c navbar --spec=false
 	RouterModule.forRoot(rotas),
 	- configurar a chamada das rotas em app.component.html:
 	<router-outlet></router-outlet>		isso funciona como placeholder, onde o Agular preeche de acordo com a rota atual.
-	
+
 18.3. Navegando com Router Link
 -------------------------------
 *	Um forma seria colocando o acesso à página via URL:
@@ -303,7 +315,7 @@ ng g c navbar --spec=false
 *	Para redirecionar uma rota quendo o path estiver vazio:
 	Altera app.module.ts e incluir, por exemplo:
 	{ path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
-	
+
 18.11. Tratando rota não encontrada
 -----------------------------------
 *	Primeiro, criar um componente para informar a mensagem de página não encontrada.
@@ -326,7 +338,7 @@ ng g c navbar --spec=false
 	  ],
 	ficando assim:
 	exports: [],
-	pois não estamos mais utilizando o componente pelo seletor, exemplo em app.component.html: 
+	pois não estamos mais utilizando o componente pelo seletor, exemplo em app.component.html:
 	<app-lancamentos-pesquisa></app-lancamentos-pesquisa>
 *	Obs.: os parâmetros em declarations continua sendo obrigado.
 	Exemplo em pessoa.module.ts:
@@ -343,7 +355,7 @@ ng g c navbar --spec=false
 	private title: Title no ...component.ts
 	em seguinda no OnInit() incluir this.title.setTitle('Pesauisa de Lançamento');
 	depois o serviço deve ser registrado no providers, no caso vamos colocar em core.module.ts
-	
+
 18.13. Refatorando as rotas para usar Routing Module
 ----------------------------------------------------
 *	Criar um arquivo apenas para configurar as rotas da aplicação.
@@ -356,7 +368,7 @@ ng g c navbar --spec=false
 	Criado: em lancamentos, lancamentos-routing.module.ts que o módulo de rotas para o módulo de lancamentos.
 *	Quando se configura as rotas no módulo raiz o RouterModule chama o forRoot (RouterModule.forRoot(routes))
 	Quando se configura as rotas filhas, chama o forchild
-*	o lancamentos.module.ts não precisa mais importar  o RouterModule, já que o LancamentosRoutingModule ja 
+*	o lancamentos.module.ts não precisa mais importar  o RouterModule, já que o LancamentosRoutingModule ja
 	exporta o RouterModule: exports: [RouterModule].
 *	O lancamentos.module.ts irá agora importar o LancamentosRoutingModule
 
@@ -365,25 +377,25 @@ ng g c navbar --spec=false
 *	--spring.profiles.active-oauth-security
 
 ================================================================================================================
-	
+
 19.5. Decodificando o JWT e armazenando no Local Storage
 --------------------------------------------------------
 *	Instalar via npm nova biblioteca para trabalhar com o 	jwt (token)
-	
+
 	npm install angular2-jwt --save
-	
+
 	npm install @auth0/angular-jwt			utilizei essa versão
 
 *	adicionar em core.module.ts a classe utilitária em providers, Jwthelper, para fornecer o serviço para a aplicação inteira.
 * 	em auth.service.ts, injetar private jwtHelper: Jwthelper
-*	Será preciso decodificar o token. Para relembrar, ver o site https://jwt.io/, para receber o objeto 'payload' com os dados	
+*	Será preciso decodificar o token. Para relembrar, ver o site https://jwt.io/, para receber o objeto 'payload' com os dados
 	que compoem o token.
-	
+
 19.11. Interceptando chamadas HTTP para tratar a expiração do access token
 --------------------------------------------------------------------------
 *	Criaremos um novo arquivo chamado, por exemplo, money-http.ts na pasta seguranca  que irá herdar da classe AuthHttp
 	a fim de que possamos tratar e agir quando cada método existente for acionado (post, get, put, delete, etc.)
-	
+
 19.13. Protegendo rotas com guarda de rotas (CanActivate)
 ---------------------------------------------------------
 *	Serve para que o usuário não navegue em determinadas URL do sistema em que o mesmo não tem acesso.
@@ -392,8 +404,8 @@ ng g c navbar --spec=false
 	o AuthGuard criado (auth.guard.ts)
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-	
-	
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 23.1. Criando o módulo Dashboard
 ================================
 
@@ -402,7 +414,7 @@ ng g c navbar --spec=false
 *	ng g m dashboard --routing
 *	em DashboardModule importar o ShareModule do sistema
 *	ng g c dashboard/dashboard
-*	alterar AppRoutingModule para incluir a chamada da rota 
+*	alterar AppRoutingModule para incluir a chamada da rota
 	{ path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule'}
 *	configurar a rota em DashboardRoutingModule
 *	Vamos colocar a página principal sendo a página de dashboard:
@@ -419,12 +431,12 @@ ng g c navbar --spec=false
 	"scripts": [
 		"node_modules/chart.js/dist/Chart.js"
     ]
-	
+
 23.3. Criando o serviço da Dashboard - Gráficos
 ====================================
 
 *	Vamos cosntruir o serviço para o acesso aos dados no banco de dados;
-*	Criar a classe de serviço: ng g s dashboard/dasboard 
+*	Criar a classe de serviço: ng g s dashboard/dasboard
 *	Importar DasboardService em providers do módulo core.module.ts
 *	Alterar o DashboardComponent para ler o serviço de acesso aos lançamentos por categoria e por dia e gerar os gráficos
 
@@ -502,7 +514,7 @@ ng g c navbar --spec=false
 *	renomear a tag: <p-table [value]="pessoa.contatos" para [value]="contatos"
 *	No componente, retirar a referência "pessoa" para se referenciar a "contatos", pois a referência no componente
 	é sobre os contatos.
-*	Os contatos do objeto pessoa deve ser passado para o componente criado para os contatos, logo, deverá ser incluir 
+*	Os contatos do objeto pessoa deve ser passado para o componente criado para os contatos, logo, deverá ser incluir
 	o depurador @Input no componente criado. A forma da passagem desse parâmento no html é o seguinte:
 	<app-pessoa-cadastro-contato [contatos]="pessoa.contatos"></app-pessoa-cadastro-contato>
 *	O parâmetro [contatos]="pessoa.contatos" passa a lista de contatos para o componente;
@@ -530,7 +542,7 @@ ng g c navbar --spec=false
           [style]="{ width: '25px', height: '25px' }"></p-progressSpinner>
 	após a tag do upload
 *	Em lancamento-cadastro.component.ts, criar a propriedade uploadEmAndamento
-	
+
 
 24.3. Buscando estados e cidades
 ================================
@@ -542,14 +554,277 @@ ng g c navbar --spec=false
 24.4. Preenchendo Dropdown de estados
 =====================================
 
-*	Em pessoas.module.ts, importar o componente do dropdown: 
+*	Em pessoas.module.ts, importar o componente do dropdown:
+
+
+25.4. Atualizando para o Angular 6
+==================================
+
+*	npm install -g @angular/cli				--> este comando fax a instalação global da última versão do angular
+*	npm install @angular/cli				--> atualiza a versão do projeto corrente para a última versão do angular
+*	ng update @angular/cli					--> atualiza todos os pacotes do projeto corrente
+*	npm install primeng@latest				--> trazer a versão mais recente do primeng
+*	npm install primeng/icons --save		--> icons mais recentes do primeng
+
+*	obs.: ao instalar os icons, verificar o arquivo angular.json e incluir em "styles" a dependência
+	"node_modules/primeicons/primeicons.css"
+
+*	npm install rxjs-compat --save
+
+*	npm install rxjs@6.0.0 --save
+--> Tive que instalar essa versão acima para o rxjs funcionar pois estava dando o seguinte erro:
+	ERROR in node_modules/rxjs/internal/types.d.ts(81,44): error TS1005: ';' expected.
+	node_modules/rxjs/internal/types.d.ts(81,74): error TS1005: ';' expected.
+	node_modules/rxjs/internal/types.d.ts(81,77): error TS1109: Expression expected.
+	node_modules/rxjs/internal/types.d.ts(82,52): error TS1005: ';' expected.
+	node_modules/rxjs/internal/types.d.ts(82,88): error TS1005: ';' expected.
+	node_modules/rxjs/internal/types.d.ts(82,92): error TS1109: Expression expected.
+
+25.6. Usando o Growl
+====================
+
+*	Componente de mensagem
+*	Retirado do core.module.ts o componente: import { ToastyModule } from 'ng2-toasty';
+*	Incluído a importação import { MessageService } from 'primeng/api'; em core.module.ts e injetar em Providers
+*	NO app.component.html substituir o <ng2-toasty></ng2-toasty>
+	por <p-growl></p-growl>
+*	Em ErrorHandlerService, substituir import { ToastyService } from 'ng2-toasty';
+	por import { MessageService } from 'primeng/api';
+*	Retirar import { ToastyConfig } from 'ng2-toasty'; do app.component.ts
+
+25.7. Atualizando o módulo JWT
+------------------------------
+
+*	Desisntalar o angular2-jwt
+	npm uninstall angular2-jwt --save
+*	npm install @auth0/angular-jwt --save
+*	Abrir seguranca.module.ts:
+	**	o export abaixo não será mais utilizado:
+		export function authHttpServiceFactory(auth: AuthService, http: Http, options: RequestOptions) {
+		  const config = new AuthConfig({
+			globalHeaders: [
+			  { 'Content-Type': 'application/json' }
+			]
+		  });
+
+		  return new MoneyHttp(auth, config, http, options);
+		}
+	**	Remover do Providers:
+		{
+		  provide: AuthHttp,
+		  useFactory: authHttpServiceFactory,
+		  deps: [AuthService, Http, RequestOptions]
+		},
+	**	Remover import { AuthHttp, AuthConfig } from 'angular2-jwt';
+	**	depois remover os componentes que ficaram sem uso;
+*	Alterar environment/environment.ts e incluir:
+	tokenWhitelistedDomains: [ /localhost:8080/ ],
+	tokenBlacklistedRoutes: [/\/oauth\/token/]
+*	Alterar environment/environment.prod.ts e incluir:
+	tokenWhitelistedDomains: [ /algamoney-api.herokuapp.com/ ],
+	tokenBlacklistedRoutes: [/\/oauth\/token/]
+
+25.8. Alterando a classe MoneyHttp
+==================================
+
+*	Abrir a classe money-http.ts e fazer os seguintes ajustes:
+
+**	retirar a importação: import { AuthConfig, AuthHttp, JwtHelper } from 'angular2-jwt';
+**	retirar a importação: import { Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
+**	imcluir a importação: import { HttpClient, HttpHandler } from '@angular/common/http';
+**	Mudar o extends. Substituir export class MoneyHttp extends AuthHttp  por
+	export class MoneyHttp extends
+** 	Alterar o construtor de:
+	constructor(
+		private auth: AuthService,
+		options: AuthConfig,
+		http: Http, defOpts?: RequestOptions
+	  ) {
+		super(options, http, defOpts);
+	  }
+	para:
+	constructor(
+		private auth: AuthService,
+		private httpHandler: HttpHandler
+	  ) {
+		super(httpHandler);
+	}
+**	Alterar os métodos de public ...(url: string, options?: RequestOptionsArgs): Observable<Response> {
+	para public ...<T>(url: string, options?: any): Observable<T> ]
+**	Alterar os return de: return this.fazerRequisicao(() => super.delete(url, options));
+	para: return this.fazerRequisicao<T>(() => super. ...<T>(url, options));
+**	Alterar o método:
+	private fazerRequisicao(fn: Function): Observable<Response> {
+		if (this.auth.isAccessTokenInvalido()) {
+		  console.log('Requisição HTTP com access token inválido. Obtendo novo token...');
+
+		  const chamadaNovoAccessToken = this.auth.obterNovoAccessToken()
+			.then(() => {
+			  if (this.auth.isAccessTokenInvalido()) {
+				throw new NotAuthenticatedError();
+			  }
+
+			  return fn().toPromise();
+			});
+
+		  return Observable.fromPromise(chamadaNovoAccessToken);
+		} else {
+		  return fn();
+		}
+	}
+	para:
+	private fazerRequisicao<T>(fn: Function): Observable<T> {
+		if (this.auth.isAccessTokenInvalido()) {
+		  console.log('Requisição HTTP com access token inválido. Obtendo novo token...');
+
+		  const chamadaNovoAccessToken = this.auth.obterNovoAccessToken()
+			.then(() => {
+			  if (this.auth.isAccessTokenInvalido()) {
+				throw new NotAuthenticatedError();
+			  }
+
+			  return fn().toPromise();
+			});
+
+		  return observableFromPromise(chamadaNovoAccessToken);
+		} else {
+		  return fn();
+		}
+	}
+**	Alterar a importação de: import { Observable } from 'rxjs/Observable';
+	para: import { Observable, from as observableFromPromise } from 'rxjs';
+
+25.9. Usando a classe MoneyHttp
+===============================
+
+*	em categoria.service.ts:
+**	retirar a importação: import { AuthHttp } from 'angular2-jwt';
+**	substituir constructor(private http: AuthHttp)
+	por constructor(private http: MoneyHttp), fazendo a importação do MoneyHttp
+**	Alterar método listarTodas retirando o .json
+
+*	em core.module.ts:
+**	retirar a importação import { JwtHelper } from 'angular2-jwt';
+**	incluir a importação import { JwtHelperService } from '@auth0/angular-jwt';
+**	importar import { HttpClientModule } from '@angular/common/http';
+
+*	em error-handler.service.ts:
+**	retirar a importação import { Response } from '@angular/http';
+**	incluir a importação import { HttpErrorResponse } from '@angular/common/http';
+**	errorResponse.json(); já é um json, logo pode ser retirado o .json
+
+*	em DashboardService:
+**	retirar importação import { AuthHttp } from 'angular2-jwt';
+**	no construtor, importar MoneyHttp no lugar de AuthHttp
+**	no método lancamentosPorCategoria, alterar
+	return this.http.get(`${this.lancamentosUrl}/estatisticas/por-categoria`)
+      .toPromise()
+      .then(response => response.json());
+	por:
+	return this.http.get<Array<any>>(`${this.lancamentosUrl}/estatisticas/por-categoria`)
+      .toPromise();
+**	no método lancamentosPorDia, alterar
+	return this.http.get(`${this.lancamentosUrl}/estatisticas/por-dia`)
+      .toPromise()
+      .then(response => {
+        const dados = response.json();
+        this.converterStringsParaDatas(dados);
+
+        return dados;
+    });
+	por:
+	return this.http.get<Array<any>>(`${this.lancamentosUrl}/estatisticas/por-dia`)
+      .toPromise()
+      .then(response => {
+        const dados = response;
+        this.converterStringsParaDatas(dados);
+
+        return dados;
+	});
+
+*	em lancamento.service.ts:
+**	retirar import { AuthHttp } from 'angular2-jwt';
+**	retirar import { URLSearchParams } from '@angular/http';
+**	importar import { HttpParams } from '@angular/common/http';
+**	no construtor importat MoneyHttp no lugar de AuthHttp
+
+*	em pessoa.service.ts:
+**	retirar import { AuthHttp } from 'angular2-jwt';
+**	retirar import { URLSearchParams } from '@angular/http';
+**	importar import { HttpParams } from '@angular/common/http';
+**	no construtor importat MoneyHttp no lugar de AuthHttp
+
+*	em relatorios.service.ts:
+**	retirar import { AuthHttp } from 'angular2-jwt';
+**	retirar import { ResponseContentType, URLSearchParams } from '@angular/http';
+**	impoortar import { HttpParams } from '@angular/common/http';
+**	no construtor importat MoneyHttp no lugar de AuthHttp
+
+*	em auth.service.ts:
+**	retirar import { JwtHelper } from 'angular2-jwt';
+**	retirar import { Http, Headers } from '@angular/http';
+**	importar import { HttpClient, HttpHeaders } from '@angular/common/http';
+**	importat import { JwtHelperService } from '@auth0/angular-jwt';
+**	No construtor alterar de:
+	constructor(
+		private http: Http,
+		private jwtHelper: JwtHelper
+	para:
+	constructor(
+		private http: HttpClient,
+		private jwtHelper: JwtHelperService
+
+*	em logout.service.ts:
+**	retirar import { AuthHttp } from 'angular2-jwt';
+**	importar import { MoneyHttp } from './money-http';
+
+25.10. Corrigindo o link de mudança de status
+=============================================
+
+*	No método mudarStatus, incluir a passagem do parâmetro
+	const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json');
+
+25.11. Rodando comando ng build
+===============================
+
+*	ng build --prod
+
+*	Os parâmetros abaixo deve ser passado via RegExp:
+	tokenWhitelistedDomains: [ new RegExp('localhost:8080') ],
+	tokenBlacklistedRoutes: [ new RegExp('\/oauth\/token') ]
+
+25.12. Atualizando para Angular 7
+=================================
+
+*	Segui as instruções do site: https://update.angular.io/
+*	npm install -g @angular/cli				--> este comando fax a instalação global da última versão do angular
+*	npm install -g rxjs-tslint
+*	rxjs-5-to-6-migrate -p src/tsconfig.app.json
+*	ng update @angular/cli @angular/core
+
+	Se acontecer este erro, alterar o package.json, parâmetro "@angular/core": "6.0.4", para "@angular/core": "7.2.4"
+	e executar npm install e depois novamente o ng update @angular/cli @angular/core
+
+		PS C:\Angular\workspace\teste> ng update @angular/cli @angular/core
+		Your global Angular CLI version (7.3.9) is greater than your local
+		version (6.0.8). The local Angular CLI version is used.
+
+		To disable this warning use "ng config -g cli.warnings.versionMismatch false".
+		  Package "ng2-toasty" has an incompatible peer dependency to "@angular/core"
+		  (requires ">=5.0.0-rc.0 <6.0.0||>=2.4.7 <3.0.0||>=4.0.0 <5.0.0", would install "7.2.15").
+		Incompatible peer dependencies found. See above.
+*	rodar ng audit fix, se necessário
+*	mudara a versão do primeng em package.json para "primeng": "^7.0.0", e "primeicons": "^1.0.0"
+	em seguida rodar npm install
+*	npm install @angular/cdk --save
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 20.2. Fazendo build para o ambiente de produção
 -----------------------------------------------
-*	ng build --environment=prod	
+*	ng build --environment=prod
 *	ng build --prod
 
 
@@ -560,14 +835,11 @@ Observações:
     "ng": "ng",
     "start": "ng serve --locale=pt",
     "build": "ng build",
-	
+
 - O comando 'npm start' equivale ao 'npm serve' nos casos onde a definição esteja igual às acima no "scripts"
-	
+
 - checar versão de uma biblioteca qualquer:
 	npm info primeng
-	
+
 - reinstalat todos os pacotes definidos em package.json:
 	npm install
-
-
-	

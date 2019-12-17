@@ -26,6 +26,7 @@ import { NaoAutorizadoComponent } from './nao-autorizado.component';
 
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+
 registerLocaleData(localePt, 'pt-BR');
 
 export function tokenGetter() {

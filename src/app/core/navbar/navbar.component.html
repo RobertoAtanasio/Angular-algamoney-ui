@@ -9,17 +9,25 @@
         </div>
       </div>
     </div>
-
-    <ul class="navbar-menu" [hidden]="!exibindoMenu">
+    <!-- (mouseleave)="exibindoMenu = false" -->
+    <ul class="navbar-menu" [hidden]="!exibindoMenu" >
       <li class="navbar-usuario">{{ auth.jwtPayload?.nome }}</li>
       <li class="navbar-menuitem" routerLinkActive="ativo"
-        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"><a routerLink="/dashboard">Dashboard</a></li>
+        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
+        <a routerLink="/dashboard" (click)="exibindoMenu = false">Dashboard</a>
+      </li>
       <li class="navbar-menuitem" routerLinkActive="ativo"
-        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"><a routerLink="/lancamentos">Lançamentos</a></li>
+        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
+        <a routerLink="/lancamentos" (click)="exibindoMenu = false">Lançamentos</a>
+      </li>
       <li class="navbar-menuitem" routerLinkActive="ativo"
-        *ngIf="auth.temPermissao('ROLE_PESQUISAR_PESSOA')"><a routerLink="/pessoas">Pessoas</a></li>
+        *ngIf="auth.temPermissao('ROLE_PESQUISAR_PESSOA')">
+        <a routerLink="/pessoas" (click)="exibindoMenu = false">Pessoas</a>
+      </li>
       <li class="navbar-menuitem" routerLinkActive="ativo"
-        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"><a routerLink="/relatorios/lancamentos">Relatório</a></li>
+        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
+        <a routerLink="/relatorios/lancamentos" (click)="exibindoMenu = false">Relatório</a>
+      </li>
       <li class="navbar-menuitem" (click)="logout()"><a href="#">Logout</a></li>
     </ul>
 

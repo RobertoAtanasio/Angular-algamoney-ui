@@ -1,6 +1,14 @@
 <div class="container" style="max-width: 400px; margin: auto">
 
-  <!-- {{ auth.jwtPayload | json }} -->
+  <!-- {{ auth.jwtPayload | json }} assafsa -->
+
+  <div class="alert alert-success" role="alert" *ngIf="exibirAlerta">
+    Informe o Usuário e Senha!
+  </div>
+
+  <div class="alert alert-success" role="alert" [hidden]="!exibirAlerta">
+    Informe o Usuário e Senha!
+  </div>
 
   <form autocomplete="off" #f="ngForm">
     <div class="ui-g ui-fluid">
@@ -11,12 +19,14 @@
 
       <div class="ui-g-12">
         <input pInputText type="email" name="usuario" placeholder="E-mail"
-          ngModel required #usuario>
+          ngModel required #usuario
+          (focus)="exibirAlerta = false">
       </div>
 
       <div class="ui-g-12">
         <input pInputText type="password" name="senha" placeholder="Senha"
-          ngModel required #senha>
+          ngModel required #senha
+          (focus)="exibirAlerta = false">
       </div>
 
       <div class="ui-g-12">

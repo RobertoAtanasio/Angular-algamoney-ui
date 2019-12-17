@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 })
 export class LoginFormComponent implements OnInit {
 
+  exibirAlerta = true;
+
   constructor(
     private auth: AuthService,
     private errorHandler: ErrorHandlerService,

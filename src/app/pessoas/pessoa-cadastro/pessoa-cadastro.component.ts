@@ -38,7 +38,7 @@ export class PessoaCadastroComponent implements OnInit {
     if (codigoPessoa) {
       // this.title.setTitle('Edição de Pessoa');
       this.atualizarTituloEdicao();
-      this.carregarPessoas(codigoPessoa);
+      this.carregarPessoa(codigoPessoa);
     }
     // if (typeof codigoPessoa === 'string') {
     //   setTimeout(function() {
@@ -92,13 +92,14 @@ export class PessoaCadastroComponent implements OnInit {
   }
 
   carregarCidades() {
+    // console.log('Estado',this.estadoSelecionado);
     this.pessoaService.pesquisarCidades(this.estadoSelecionado).then(lista => {
       this.cidades = lista.map(c => ({ label: c.nome, value: c.codigo }));
     })
     .catch(erro => this.errorHandler.handle(erro));
   }
 
-  carregarPessoas(codigo: number) {
+  carregarPessoa(codigo: number) {
     return this.pessoaService.buscarPorCodigo(codigo)
       .then((data) => {
         this.pessoa = data;
@@ -117,6 +118,8 @@ export class PessoaCadastroComponent implements OnInit {
   }
 
   salvar(form: FormControl) {
+    // console.log('Nome', form.value.nomex);
+    // console.log('Nome', this.pessoa.nome);
     if (this.editando) {
       this.atualizar(form);
     } else {

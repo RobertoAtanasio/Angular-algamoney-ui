@@ -22,18 +22,7 @@ export class RelatoriosService {
 
     return this.http.get(`${this.lancamentosUrl}/relatorios/por-pessoa`,
       { params, responseType: 'blob' })
-      .toPromise()
-      .then(response => {
-        return response;
-      });
-
-
-    return this.http.get(`${this.lancamentosUrl}?resumo`, { params })
-      .toPromise()
-      .then(response => {
-        return response;
-      }
-    );
+      .toPromise();
   }
 
 }
