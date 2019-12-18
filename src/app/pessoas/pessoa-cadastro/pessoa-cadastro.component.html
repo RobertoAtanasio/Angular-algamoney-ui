@@ -20,6 +20,12 @@
           #nomex="ngModel"
           required minlength="5">
 
+        <!-- Touched altera quando for clicado e retirado o focu. As propriedade abaixo também existe no formulário  -->
+
+        <!-- Touched: {{nomex.touched}}
+        Pristine: {{nomex.pristine}}
+        Dirty: {{nomex.dirty}} -->
+
         <!-- <div *ngIf="nomex.hasError('required') && nomex.dirty">
           <span>Informe o nome</span>
         </div>
@@ -77,7 +83,7 @@
       <div class="ui-g-12 ui-md-6 ui-fluid">
         <label>Estado</label>
 
-        <p-dropdown placeholder="Selecione..." [autoWidth]="false"
+        <p-dropdown placeholder="Selecione..."
           [filter]="true" [options]="estados"
           [(ngModel)]="estadoSelecionado" name="estadoSelecionado"
           (onChange)="alterouEstado()"
@@ -92,7 +98,7 @@
 
       <div class="ui-g-12 ui-md-6 ui-fluid">
         <label>Cidade</label>
-        <p-dropdown placeholder="Selecione..." [autoWidth]="false"
+        <p-dropdown placeholder="Selecione..."
           [filter]="true" [options]="cidades"
           [(ngModel)]="pessoa.endereco.cidade.codigo" name="cidade"
           #cidade="ngModel" required

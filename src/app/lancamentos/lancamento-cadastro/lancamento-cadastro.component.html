@@ -10,10 +10,12 @@
           formControlName="tipo"></p-selectButton>
       </div>
 
+      <!-- para o uso do p-calendar é preciso importar o componente BrowserAnimationsModule
+      que está em app.module.ts -->
       <div class="ui-g-6 ui-md-3 ui-fluid">
         <label>Vencimento</label>
         <p-calendar name="vencimento" dateFormat="dd/mm/yy"
-          [inline]="false" [readonlyInput]="false" [showIcon]="false"
+          [inline]="false" [readonlyInput]="true" [showIcon]="true"
           formControlName="dataVencimento"></p-calendar>
 
         <app-message [control]="formulario.get('dataVencimento')" error="required"
@@ -22,7 +24,7 @@
 
       <div class="ui-g-6 ui-md-3 ui-fluid">
         <label>{{ formulario.get('tipo').value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
-        <p-calendar dateFormat="dd/mm/yy" name="dataPagamento"
+        <p-calendar dateFormat="dd/mm/yy" name="dataPagamento" [readonlyInput]="true" [showIcon]="true"
           formControlName="dataPagamento"></p-calendar>
       </div>
 

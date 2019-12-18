@@ -136,6 +136,7 @@ export class PessoaCadastroComponent implements OnInit {
         });
         form.reset();
         this.pessoa = new Pessoa();
+        // form.reset({nomex: 'Roberto'});
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
