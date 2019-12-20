@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
       // }
 
       if (this.auth.isAccessTokenInvalido()) {
+        console.log('auth.guards... Token inválido.');
         return this.auth.obterNovoAccessToken()
           .then( () => {
             if (this.auth.isSessaoExpirou() || this.auth.isAccessTokenInvalido()) {

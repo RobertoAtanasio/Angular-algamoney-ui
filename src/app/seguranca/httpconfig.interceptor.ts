@@ -43,8 +43,8 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 
       if (request.url.includes('/lancamentos/anexo')) {
         request = request.clone({ headers: request.headers.set('Content-Type', 'multipart/form-data') });
-        console.log('>> interceptors URL:', request.url);
-        console.log('>> interceptors headers:', request.headers);
+        // console.log('>> interceptors URL:', request.url);
+        // console.log('>> interceptors headers:', request.headers);
       }
 
       if (!request.url.includes('/lancamentos/anexo')) {
@@ -52,6 +52,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
       }
 
       if (this.auth.isAccessTokenInvalido()) {
+        console.log('httpconfig.interceptors... Token inválido.');
         this.auth.obterNovoAccessToken()
         .then ( () => {
           return next.handle(request);
@@ -66,7 +67,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
           }),
           // retry(1),
           catchError((error: HttpErrorResponse) => {
-            console.log('URL:', request.url);
+            // console.log('URL:', request.url);
             return throwError(error);
           })
         );

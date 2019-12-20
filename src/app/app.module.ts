@@ -26,7 +26,6 @@ import { HttpConfigInterceptor } from './seguranca/httpconfig.interceptor';
 // obs.: foram feitos ajustes também em LancamentosRoutingModule, PessoasRoutingModule e
 // SegurancaModule
 
-
 @NgModule({
   declarations: [
     AppComponent,

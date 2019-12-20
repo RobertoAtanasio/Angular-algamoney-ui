@@ -23,6 +23,7 @@ export class ErrorHandlerService {
       msg = errorResponse;
     } else if (errorResponse instanceof Object
         && errorResponse.status === 401) {
+      // Usuário não permissão de acesso à requisição solicitada.
       return null;
     } else if (errorResponse instanceof Object
         && errorResponse.status >= 400 && errorResponse.status <= 499) {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ErrorHandlerService } from './../../core/error-handler.service';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login-form',
@@ -10,12 +11,13 @@ import { Router } from '@angular/router';
 })
 export class LoginFormComponent implements OnInit {
 
-  exibirAlerta = true;
+  // exibirAlerta = false;
 
   constructor(
     private auth: AuthService,
     private errorHandler: ErrorHandlerService,
-    private router: Router) {}
+    private router: Router,
+    private messageService: MessageService) {}
 
   ngOnInit() {
   }
@@ -29,7 +31,10 @@ export class LoginFormComponent implements OnInit {
       this.router.navigate(['/dashboard']);
     })
     .catch(erro => {
-      this.errorHandler.handle(erro);
+      this.messageService.add({
+        severity: 'error',
+        detail: erro
+      });
     });
   }
 
