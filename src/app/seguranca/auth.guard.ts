@@ -22,10 +22,9 @@ export class AuthGuard implements CanActivate {
       // }
 
       if (this.auth.isAccessTokenInvalido()) {
-        console.log('auth.guards... Token inválido.');
         return this.auth.obterNovoAccessToken()
           .then( () => {
-            if (this.auth.isSessaoExpirou() || this.auth.isAccessTokenInvalido()) {
+            if (this.auth.isAccessTokenInvalido()) {
               this.router.navigate(['/login']);
               return false;
             }
@@ -39,5 +38,5 @@ export class AuthGuard implements CanActivate {
       }
 
     return true;
-  }
+    }
 }

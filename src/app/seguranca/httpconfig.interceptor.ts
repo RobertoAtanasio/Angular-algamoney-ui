@@ -10,25 +10,23 @@ import {
 } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-import { map, catchError, tap, retry } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
 
-    constructor(private auth: AuthService) { }
+    constructor(private auth: AuthService, private router: Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
       if (request.url.includes('/oauth/token')) {
         return next.handle(request);
       }
+
       if (request.url.includes('/tokens/revoke')) {
         return next.handle(request);
-      }
-
-      if (this.auth.isSessaoExpirou()) {
-        this.auth.logout();
       }
 
       const token: string = this.auth.obterToken();
@@ -51,26 +49,19 @@ export class HttpConfigInterceptor implements HttpInterceptor {
         request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
       }
 
-      if (this.auth.isAccessTokenInvalido()) {
-        console.log('httpconfig.interceptors... Token inválido.');
-        this.auth.obterNovoAccessToken()
-        .then ( () => {
-          return next.handle(request);
+      return next.handle(request).pipe(
+        map((event: HttpEvent<any>) => {
+          if (event instanceof HttpResponse) {
+            // console.log('URL', event.url);
+          }
+          return event;
+        }),
+        // retry(1),
+        catchError((error: HttpErrorResponse) => {
+          console.log('URL:', request.url);
+          return throwError(error);
         })
-      } else {
-        return next.handle(request).pipe(
-          map((event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-              // console.log('URL', event.url);
-            }
-            return event;
-          }),
-          // retry(1),
-          catchError((error: HttpErrorResponse) => {
-            // console.log('URL:', request.url);
-            return throwError(error);
-          })
-        );
-      }
+      );
+
     }
 }

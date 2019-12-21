@@ -67,7 +67,6 @@ export class LancamentoCadastroComponent  implements OnInit {
   }
 
   fileProgress(fileInput: any) {
-    console.log('<<< aqui >>>');
     this.fileData = <File>fileInput.target.files[0];
   }
 
@@ -78,7 +77,6 @@ export class LancamentoCadastroComponent  implements OnInit {
   }
 
   onSubmit() {
-    console.log('>>> upload', this.fileData);
     // const formData = new FormData();
     // formData.append('file', this.fileData);
     return this.lancamentoService.upload(this.fileData);

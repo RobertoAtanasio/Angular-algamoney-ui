@@ -2,9 +2,9 @@
 
   <!-- {{ auth.jwtPayload | json }} -->
 
-  <!-- <div class="alert alert-success" role="alert" *ngIf="exibirAlerta">
-    Informe o Usuário e Senha!
-  </div> -->
+  <div class="alert alert-success expirou" role="alert" *ngIf="exibirAlerta">
+    Sua sessão expirou!
+  </div>
 
   <!-- <div class="alert alert-success" role="alert" [hidden]="!exibirAlerta">
     Informe o Usuário e Senha!

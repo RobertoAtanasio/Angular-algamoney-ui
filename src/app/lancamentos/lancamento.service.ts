@@ -6,8 +6,7 @@ import {
   HttpParams,
   HttpErrorResponse,
   HttpEvent,
-  HttpResponse,
-  HttpEventType  } from '@angular/common/http';
+  HttpResponse } from '@angular/common/http';
 
 import * as moment from 'moment';
 import { Lancamento } from './../core/model';
@@ -31,7 +30,8 @@ export class LancamentoService {
   // retorno: any;
   lancamentosUrl: string;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private httpClient: HttpClient) {
     this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
   }
 
@@ -103,6 +103,7 @@ export class LancamentoService {
         return response;
       }
     );
+
   }
 
   getAllGet(filtro: LancamentoFiltro): Observable<any> {

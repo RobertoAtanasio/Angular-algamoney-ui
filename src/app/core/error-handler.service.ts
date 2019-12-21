@@ -15,11 +15,7 @@ export class ErrorHandlerService {
 
     let msg: string;
 
-    if (this.auth.isTokenExpirou()) {
-      return null;
-    } else if (this.auth.isSessaoExpirou()) {
-      return null;
-    } else if (typeof errorResponse === 'string') {
+    if (typeof errorResponse === 'string') {
       msg = errorResponse;
     } else if (errorResponse instanceof Object
         && errorResponse.status === 401) {

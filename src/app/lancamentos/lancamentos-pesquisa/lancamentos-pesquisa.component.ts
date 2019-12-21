@@ -50,15 +50,31 @@ export class LancamentosPesquisaComponent implements OnInit {
 
     this.filtro.pagina = pagina;
 
-    this.lancamentoService.pesquisar(this.filtro)
-      .then((data) => {
-        this.lancamentos = data.content;
-        this.totalRegistros = data.totalElements;
-      })
-      .catch(erro => {
-        this.errorHandler.handle(erro);
-      }
-    );
+    if (this.auth.isAccessTokenInvalido()) {
+      this.auth.obterNovoAccessToken()
+        .then ( () => {
+
+          this.lancamentoService.pesquisar(this.filtro)
+            .then((data) => {
+              this.lancamentos = data.content;
+              this.totalRegistros = data.totalElements;
+            })
+            .catch(erro => {
+              this.errorHandler.handle(erro);
+            }
+          );
+        });
+    } else {
+      this.lancamentoService.pesquisar(this.filtro)
+        .then((data) => {
+          this.lancamentos = data.content;
+          this.totalRegistros = data.totalElements;
+        })
+        .catch(erro => {
+          this.errorHandler.handle(erro);
+        }
+      );
+    }
 
     // this.lancamentoService.getAllGet(this.filtro)
     //   .subscribe(data => {

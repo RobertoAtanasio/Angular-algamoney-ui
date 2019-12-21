@@ -1,3 +1,13 @@
+Caso exista algum processo executando na porta 8080, segue os comando para excluir o processo.
+Abrir o CMD com opção de administrador:
+
+	netstat -ano | findstr 8080
+
+	taskkill /F /pid 3744
+
+--------------------------------------------------------------------------------------------------
+
+
 npm install -g @angular/cli
 
 npm uninstall -g @angular/cli   --> para desistalar

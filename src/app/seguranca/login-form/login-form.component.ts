@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
 })
 export class LoginFormComponent implements OnInit {
 
-  // exibirAlerta = false;
+  exibirAlerta = false;
 
   constructor(
     private auth: AuthService,
@@ -20,6 +20,7 @@ export class LoginFormComponent implements OnInit {
     private messageService: MessageService) {}
 
   ngOnInit() {
+    this.exibirAlerta = this.auth.isSessaoExpirou();
   }
 
   login(usuario: string, senha: string) {

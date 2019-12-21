@@ -44,9 +44,11 @@ export class AuthService {
 
   login(usuario: string, senha: string): Promise<any> {
 
+    this.apagarLocalStorage();
+
     const headers = new HttpHeaders()
-    .set('Content-Type', this.contentType)
-    .set('Authorization', this.authorization);
+      .set('Content-Type', this.contentType)
+      .set('Authorization', this.authorization);
 
     // Setar os parâmetros do corpo da requisição.
     const body = `client=angular&username=${usuario}&password=${senha}&grant_type=password`;
@@ -60,7 +62,6 @@ export class AuthService {
         return response;  // se incluir o return, o método deve retornar any, senão void
       })
       .catch(response => {
-        // console.log('>', response);
         if (response.status === 400) {
           const data = JSON.parse(JSON.stringify(response));
           if (data.error.error === 'invalid_grant') {
@@ -79,26 +80,17 @@ export class AuthService {
     return false;
   }
 
+  isSessaoExpirou(): boolean {
+    const sessaoExpirou = localStorage.getItem('sessao_expirada');
+    const expirou = !!sessaoExpirou;
+    localStorage.removeItem('sessao_expirada');
+    return expirou;
+  }
+
   isAccessTokenInvalido() {
     const token = localStorage.getItem('token');
     this.jwtPayload = this.jwtHelper.decodeToken(token);
     return !token || this.jwtHelper.isTokenExpired(token);
-  }
-
-  isTokenExpirou(): boolean {
-    const tokenExpirou = this.getControleTokenExpirou();
-    if (!tokenExpirou || tokenExpirou === 'SIM') {
-      return true;
-    }
-    return false;
-  }
-
-  isSessaoExpirou(): boolean {
-    const tokenExpirou = this.getControleTokenExpirou();
-    if (tokenExpirou === 'sessao_expirou') {
-      return true;
-    }
-    return false;
   }
 
   obterNovoAccessToken(): Promise<any> {
@@ -107,31 +99,24 @@ export class AuthService {
       return Promise.resolve(null);
     }
 
-    if (this.isSessaoExpirou) {
-      alert('Access Token expirou!');
-      // this.logout();
-    }
-
     const headers = new HttpHeaders()
-    .set('Authorization', this.authorization)
-    .set('Content-Type', this.contentType);
+      .set('Authorization', this.authorization)
+      .set('Content-Type', this.contentType);
 
     const body = 'grant_type=refresh_token';
-
-    console.log('obtendo novo token...');
 
     return this.http.post(this.oauthTokenUrl, body, { headers, withCredentials: true })
       .toPromise()
       .then(response => {
-        console.log('obteve novo token.');
+        console.log('Novo token obtido.');
         const data = JSON.parse(JSON.stringify(response));
         this.token = data.access_token;
         this.armazenarToken(this.token);
         return Promise.resolve(null);
       })
       .catch(response => {
-        console.log('erro ao obter novo token.');
-        this.setSessaoExpirou();
+        this.apagarLocalStorage();
+        localStorage.setItem('sessao_expirada', '*');
         this.messageService.add({
           severity: 'error',
           detail: 'Sua sessão expirou!'
@@ -184,30 +169,32 @@ export class AuthService {
 
     console.log('Logout...');
     const headers = new HttpHeaders()
-    .set('Authorization', this.authorization);
+      .set('Authorization', this.authorization);
 
     return this.http.delete(this.tokensRevokeUrl, { headers, withCredentials: true })
-    .toPromise()
-    .then(() => {
-      this.apagarLocalStorage();
-      this.router.navigate(['/login']);
-    })
-    .catch( erro => {
-      console.log('Houve erro no delete token...');
-      this.messageService.add({
-        severity: 'error',
-        detail: erro
+      .toPromise()
+      .then(() => {
+        alert('Delete OK');
+        this.apagarLocalStorage();
+        this.router.navigate(['/login']);
+      })
+      .catch( erro => {
+        alert('Delete Erro');
+        console.log('Houve erro no delete token...');
+        this.messageService.add({
+          severity: 'error',
+          detail: erro
+        });
+        this.apagarLocalStorage();
+        this.router.navigate(['/login']);
       });
-      this.apagarLocalStorage();
-      this.router.navigate(['/login']);
-    });
   }
 
   apagarLocalStorage() {
     this.token = null;
     this.jwtPayload = null;
     localStorage.removeItem('token');
-    localStorage.removeItem('access_token_expirou');
+    localStorage.removeItem('sessao_expirada');
   }
 
   private carregarToken() {
@@ -223,13 +210,4 @@ export class AuthService {
     this.tokenExpired = this.jwtHelper.isTokenExpired(token);
     this.dateExpiration = this.jwtHelper.getTokenExpirationDate(token);
   }
-
-  private setSessaoExpirou() {
-    localStorage.setItem('access_token_expirou', 'sessao_expirou');
-  }
-
-  private getControleTokenExpirou(): string {
-   return localStorage.getItem('access_token_expirou');
-  }
-
 }
